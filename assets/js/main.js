@@ -218,11 +218,23 @@
       status.textContent = "";
 
       try {
-        // Wire this up to the FastAPI backend, e.g.:
-        // await fetch("/api/contact", { method: "POST", body: new FormData(form) });
-        await new Promise(res => setTimeout(res, 1100));
+        const payload = {
+          name: form.querySelector("[name=name]").value.trim(),
+          email: form.querySelector("[name=email]").value.trim(),
+          interested_in: form.querySelector("[name=interest]").value.trim(),
+          message: form.querySelector("[name=message]").value.trim()
+        };
 
-        status.textContent = "Message sent — we'll get back to you within a business day.";
+        const res = await fetch("/backend/contact-handler.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await res.json();
+        if (!res.ok || !result.success) throw new Error(result.message || "Submit failed");
+
+        status.textContent = result.message || "Message sent — we'll get back to you within a business day.";
         status.classList.add("is-success");
         form.reset();
         fields.forEach(f => f.closest(".field").classList.remove("is-invalid"));
