@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FutureXacademy — Digital, AI &amp; Design Studio in Kolkata</title>
-<meta name="description" content="FutureX Academy is a next-generation agency and learning studio in Kolkata, delivering innovative digital solutions, AI/ML development, website strategies, performance marketing, and graphic design.">
+<title>FutureXacademy — Digital, AI &amp; Design Studio in Haridwar</title>
+<meta name="description" content="FutureX Academy is a next-generation agency and learning studio in Haridwar, UP, delivering innovative digital solutions, AI/ML development, website strategies, performance marketing, and graphic design.">
 <meta name="theme-color" content="#FFFFFF">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,8 +22,7 @@
 <header class="nav" id="nav">
   <div class="nav__inner">
     <a href="#" class="nav__brand">
-      <span class="nav__mark" aria-hidden="true">F</span>
-      FutureX<span>academy</span>
+      <span class="brand-word"><span class="brand-word__future">Future</span><span class="brand-word__x">X</span></span>
     </a>
 
     <nav class="nav__links" aria-label="Primary">
@@ -33,6 +32,10 @@
     </nav>
 
     <div class="nav__actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/></svg>
+      </button>
       <a href="#contact" class="btn btn--primary btn--magnetic">Get in touch</a>
     </div>
 
@@ -51,6 +54,20 @@
 
 <main id="main">
 
+  <!-- ===================== FULL-PAGE PHOTO SLIDESHOW ===================== -->
+  <!-- To add/change photos: just drop image files into
+       assets/images/slideshow-1920x1080-16x9/ named 1.jpg, 2.jpg, 3.jpg ...
+       (numbered in order, no gaps). Landscape photos, ~1920x1080 (16:9),
+       under ~500KB each work best. No code changes needed. -->
+  <section class="fullpage-slideshow" id="fullpageSlideshow" aria-label="FutureX showcase">
+    <div class="fullpage-slideshow__track" id="slideshowTrack"></div>
+    <div class="fullpage-slideshow__overlay"></div>
+    <div class="fullpage-slideshow__dots" id="slideshowDots"></div>
+    <div class="fullpage-slideshow__scroll" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+    </div>
+  </section>
+
   <!-- ===================== HERO ===================== -->
   <section class="hero">
     <canvas id="constellation" class="hero__canvas" aria-hidden="true"></canvas>
@@ -60,11 +77,12 @@
     <div class="hero__inner reveal">
       <p class="eyebrow eyebrow--pill"><span class="eyebrow__dot"></span> AI &bull; DESIGN &bull; DEVELOPMENT &bull; GROWTH</p>
       <h1 class="hero__title">
-        Build your future in<br>
-        <span class="text-gradient">digital, AI &amp; design</span>
+        <span class="hero__brand brand-word"><span class="brand-word__future">Future</span><span class="brand-word__x">X</span></span>
+        <span class="hero__tagline-main">Digi <span class="tag-ai">AI</span> Academy and Labs</span>
+        <span class="hero__tagline-sub">&raquo;&raquo;&raquo; Learn Today, Lead Tomorrow &laquo;&laquo;&laquo;</span>
       </h1>
       <p class="hero__sub">
-        FutureX Academy is a next-generation agency and learning studio in Kolkata,
+        FutureX Academy is a next-generation agency and learning studio in Haridwar, UP,
         delivering innovative digital solutions, AI/ML development, website strategies,
         performance marketing, and graphic design.
       </p>
@@ -79,7 +97,7 @@
 
       <div class="hero__stats">
         <div class="stat">
-          <span class="stat__num" data-count="4">0</span>
+          <span class="stat__num" data-count="6">0</span>
           <span class="stat__label">Core Disciplines</span>
         </div>
         <div class="stat__divider" aria-hidden="true"></div>
@@ -95,57 +113,19 @@
       </div>
     </div>
 
-    <!-- ============= HERO IMAGE SLIDER ============= -->
-    <div class="hero-slider reveal" id="heroSlider" aria-roledescription="carousel" aria-label="FutureX showcase">
-      <div class="hero-slider__track">
-        <figure class="hero-slider__slide is-active" data-slide="0">
-          <img src="assets/images/hero-ai.jpg" alt="Artificial intelligence development at FutureX Academy" loading="eager">
-          <div class="hero-slider__overlay"></div>
-          <figcaption><span>Artificial Intelligence</span>Smarter systems, built and taught in-house.</figcaption>
-        </figure>
-        <figure class="hero-slider__slide" data-slide="1">
-          <img src="assets/images/hero-ai-class.jpg" alt="AI class in session at FutureX Academy" loading="lazy">
-          <div class="hero-slider__overlay"></div>
-          <figcaption><span>Live AI Classes</span>Cohort-based learning with real mentors.</figcaption>
-        </figure>
-        <figure class="hero-slider__slide" data-slide="2">
-          <img src="assets/images/hero-digital-marketing.jpg" alt="Digital marketing strategy at FutureX Academy" loading="lazy">
-          <div class="hero-slider__overlay"></div>
-          <figcaption><span>Digital Marketing</span>Growth strategy backed by real data.</figcaption>
-        </figure>
-        <figure class="hero-slider__slide" data-slide="3">
-          <img src="assets/images/hero-graphic-design.jpg" alt="Graphic design work at FutureX Academy" loading="lazy">
-          <div class="hero-slider__overlay"></div>
-          <figcaption><span>Graphic Design</span>Visual identity that carries a brand.</figcaption>
-        </figure>
-        <figure class="hero-slider__slide" data-slide="4">
-          <img src="assets/images/hero-programming.jpg" alt="Programming and web development at FutureX Academy" loading="lazy">
-          <div class="hero-slider__overlay"></div>
-          <figcaption><span>Programming</span>Future-proof code for apps and web.</figcaption>
-        </figure>
-      </div>
-
-      <button class="hero-slider__arrow hero-slider__arrow--prev" id="heroPrev" aria-label="Previous slide">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <button class="hero-slider__arrow hero-slider__arrow--next" id="heroNext" aria-label="Next slide">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
-      <div class="hero-slider__dots" id="heroDots"></div>
-    </div>
   </section>
 
   <!-- ===================== SERVICES / DISCIPLINES ===================== -->
   <section class="section" id="services">
     <div class="section__head reveal">
       <p class="eyebrow eyebrow--center"><span class="eyebrow__dot"></span> What we do</p>
-      <h2 class="section__title">Four disciplines. One<br>future-ready studio.<span class="accent-bar" style="margin-left:auto;margin-right:auto;"></span></h2>
+      <h2 class="section__title">Six disciplines. One<br>future-ready studio.<span class="accent-bar" style="margin-left:auto;margin-right:auto;"></span></h2>
       <p class="section__sub">Learn, build, and brand with excellence — all under one roof, shaping the future every day.</p>
     </div>
 
-    <div class="grid grid--4" id="disciplineGrid">
+    <div class="grid grid--6" id="disciplineGrid">
       <article class="card reveal" style="--d:0">
-        <div class="card__art"><img src="assets/images/card-digital-marketing.jpg" alt="Digital marketing campaign visual" loading="lazy"></div>
+        <div class="card__art"><img src="assets/images/site-photos/card-digital-marketing-16x10.jpg" alt="Digital marketing campaign visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c2.5 2.5 4 5.7 4 9.5 0 2-1 4-1 4l-6 0s-1-2-1-4c0-3.8 1.5-7 4-9.5z"/><circle cx="12" cy="10" r="1.6"/><path d="M9 15.5 7 20l2.5-1.2M15 15.5l2 4.5-2.5-1.2"/></svg>
         </div>
@@ -159,7 +139,7 @@
       </article>
 
       <article class="card reveal" style="--d:1">
-        <div class="card__art"><img src="assets/images/card-ai.jpg" alt="Artificial intelligence visual" loading="lazy"></div>
+        <div class="card__art"><img src="assets/images/site-photos/card-ai-16x10.jpg" alt="Artificial intelligence visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1.5 5.6A3 3 0 0 0 7 17a3 3 0 0 0 5 2.2A3 3 0 0 0 17 17a3 3 0 0 0 2.5-4.4A3 3 0 0 0 18 7a3 3 0 0 0-3-3 2.9 2.9 0 0 0-3 1 2.9 2.9 0 0 0-3-1z"/><path d="M9 9.5h.01M15 9.5h.01M9 14h.01M15 14h.01M12 4v16"/></svg>
         </div>
@@ -174,7 +154,7 @@
       </article>
 
       <article class="card reveal" style="--d:2">
-        <div class="card__art"><img src="assets/images/card-programming.jpg" alt="Programming and code visual" loading="lazy"></div>
+        <div class="card__art"><img src="assets/images/site-photos/card-programming-16x10.jpg" alt="Programming and code visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4L3 12l5 8M16 4l5 8-5 8"/></svg>
         </div>
@@ -188,7 +168,7 @@
       </article>
 
       <article class="card reveal" style="--d:3">
-        <div class="card__art"><img src="assets/images/card-graphic-design.jpg" alt="Graphic design poster visual" loading="lazy"></div>
+        <div class="card__art"><img src="assets/images/site-photos/card-graphic-design-16x10.jpg" alt="Graphic design poster visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.6 7.6"/><circle cx="11" cy="11" r="2"/></svg>
         </div>
@@ -198,6 +178,34 @@
           <li>Brand Identity</li>
           <li>UI/UX Design</li>
           <li>Visual &amp; Motion</li>
+        </ul>
+      </article>
+
+      <article class="card reveal" style="--d:4">
+        <div class="card__art"><img src="assets/images/site-photos/card-tally-16x10.jpg" alt="Tally Prime accounting software visual" loading="lazy"></div>
+        <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+        </div>
+        <h3>Tally Prime (GST + ERP)</h3>
+        <p>Practical accounting and business software training for real-world finance roles.</p>
+        <ul class="card__list">
+          <li>Tally Prime Basics &amp; Advanced</li>
+          <li>GST Filing &amp; Compliance</li>
+          <li>ERP &amp; Inventory Management</li>
+        </ul>
+      </article>
+
+      <article class="card reveal" style="--d:5">
+        <div class="card__art"><img src="assets/images/site-photos/card-social-media-16x10.jpg" alt="Social media management visual" loading="lazy"></div>
+        <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2.3"/><circle cx="18" cy="6" r="2.3"/><circle cx="18" cy="18" r="2.3"/><path d="M7 10.8l9-3.6M7 13.2l9 3.6"/></svg>
+        </div>
+        <h3>Social Media Agency</h3>
+        <p>End-to-end social presence management that builds real audiences.</p>
+        <ul class="card__list">
+          <li>Content Planning &amp; Posting</li>
+          <li>Community Management</li>
+          <li>Paid Social Campaigns</li>
         </ul>
       </article>
     </div>
@@ -216,22 +224,30 @@
 
     <div class="split__grid">
       <div class="mini-card reveal" style="--d:0">
-        <div class="mini-card__art"><img src="assets/images/hero-ai.jpg" alt="" loading="lazy"></div>
+        <div class="mini-card__icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6a2 2 0 0 1 2-2h9l5 5v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M15 4v5h5M9 13h6M9 17h6"/></svg>
+        </div>
         <h4>Learning by building</h4>
         <p>Practical, real-world learning through live projects and real clients.</p>
       </div>
       <div class="mini-card reveal" style="--d:1">
-        <div class="mini-card__art"><img src="assets/images/hero-ai-class.jpg" alt="" loading="lazy"></div>
+        <div class="mini-card__icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3-6.2 7-6.2s7 2.6 7 6.2"/></svg>
+        </div>
         <h4>Expert mentors</h4>
         <p>Industry professionals guiding you every step of the way.</p>
       </div>
       <div class="mini-card reveal" style="--d:2">
-        <div class="mini-card__art"><img src="assets/images/hero-graphic-design.jpg" alt="" loading="lazy"></div>
+        <div class="mini-card__icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l5-11 4 6 3-4 4 9"/><circle cx="18" cy="6" r="2.4"/></svg>
+        </div>
         <h4>Outcome ready</h4>
         <p>Portfolio, internship, and job-ready skills to launch your career forward.</p>
       </div>
       <div class="mini-card reveal" style="--d:3">
-        <div class="mini-card__art"><img src="assets/images/hero-digital-marketing.jpg" alt="" loading="lazy"></div>
+        <div class="mini-card__icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.3L18 9l-4.1 1.7L12 15l-1.9-4.3L6 9l4.1-1.7L12 3z"/><path d="M19 15l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9.9-2z"/></svg>
+        </div>
         <h4>Relevant practical skills</h4>
         <p>Curriculum that matches industry demands and real-world working.</p>
       </div>
@@ -249,15 +265,15 @@
         <ul class="contact__list">
           <li>
             <span class="contact__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
-            <span><strong>Visit us</strong><br>21, Radhanath Temple Building, near Gariahat Beverly Club, Garia More, Kolkata, West Bengal</span>
+            <span><strong>Visit us</strong><br>376, 2nd Floor, Topman Building, Vivek Vihar, near Bansal Dental Clinic, Haridwar, UP</span>
           </li>
           <li>
             <span class="contact__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
-            <span><strong>Email us</strong><br><a href="mailto:hello@futurexacademy.com">hello@futurexacademy.com</a></span>
+            <span><strong>Email us</strong><br><a href="mailto:join.futurex@gmail.com">join.futurex@gmail.com</a></span>
           </li>
           <li>
             <span class="contact__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2z"/></svg></span>
-            <span><strong>Call us</strong><br><a href="tel:+918240364977">+91 8240364977</a></span>
+            <span><strong>Call us</strong><br><a href="tel:+918679144434">86791 44434</a></span>
           </li>
         </ul>
       </div>
@@ -308,8 +324,7 @@
   <div class="footer__inner">
     <div class="footer__brand">
       <a href="#" class="nav__brand">
-        <span class="nav__mark" aria-hidden="true">F</span>
-        FutureX<span>academy</span>
+          <span class="brand-word"><span class="brand-word__future">Future</span><span class="brand-word__x">X</span></span>
       </a>
       <p>A future-focused agency and learning studio for digital, AI, coding &amp; design — empowering creators &amp; brands.</p>
     </div>
@@ -323,8 +338,8 @@
 
     <div class="footer__col">
       <h5>Reach us</h5>
-      <p>21, Radhanath Temple Building, near Gariahat Beverly Club, Garia More, Kolkata, West Bengal</p>
-      <a href="mailto:hello@futurexacademy.com">hello@futurexacademy.com</a>
+      <p>376, 2nd Floor, Topman Building, Vivek Vihar, near Bansal Dental Clinic, Haridwar, UP</p>
+      <a href="mailto:join.futurex@gmail.com">join.futurex@gmail.com</a>
     </div>
   </div>
 

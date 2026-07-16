@@ -98,16 +98,17 @@
   }
 
   /* ---------------------------------------------------------
-     Hero constellation canvas — four glowing nodes
-     (Marketing / AI / Code / Design) drifting and connecting,
-     echoing the "four disciplines, one studio" idea.
+     Hero neural-network canvas — glowing purple/blue nodes,
+     pulsing connections, occasional "spark" bursts for a
+     lively, dopamine-friendly ambient background.
   --------------------------------------------------------- */
   const canvas = document.getElementById("constellation");
   if (canvas && !prefersReducedMotion) {
     const ctx = canvas.getContext("2d");
-    let w, h, dpr;
+    let w, h, dpr, t = 0;
     let particles = [];
-    const COLORS = ["#F2B84B", "#9B8CFF", "#6FA0FF", "#FF93A8"];
+    let sparks = [];
+    const COLORS = ["#6D3BF5", "#2563EB", "#8B5CF6", "#3B82F6"];
 
     const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -119,24 +120,37 @@
     };
 
     const initParticles = () => {
-      const count = w < 640 ? 18 : 32;
+      const count = w < 640 ? 22 : 42;
       particles = Array.from({ length: count }, (_, i) => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
-        r: 1 + Math.random() * 1.6,
+        vx: (Math.random() - 0.5) * 0.32,
+        vy: (Math.random() - 0.5) * 0.32,
+        r: 1.6 + Math.random() * 2.2,
+        pulse: Math.random() * Math.PI * 2,
         color: COLORS[i % COLORS.length]
       }));
     };
 
+    // Occasional bright "spark" that travels along a connection —
+    // the small unexpected flash is the deliberate dopamine touch.
+    const maybeSpawnSpark = () => {
+      if (sparks.length > 2 || Math.random() > 0.012) return;
+      const a = particles[Math.floor(Math.random() * particles.length)];
+      const b = particles[Math.floor(Math.random() * particles.length)];
+      const dist = Math.hypot(a.x - b.x, a.y - b.y);
+      if (dist > 0 && dist < 170) sparks.push({ a, b, p: 0 });
+    };
+
     const step = () => {
+      t += 0.02;
       ctx.clearRect(0, 0, w, h);
       particles.forEach(p => {
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0 || p.x > w) p.vx *= -1;
         if (p.y < 0 || p.y > h) p.vy *= -1;
       });
+
       // connections
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -145,7 +159,7 @@
           const dist = Math.sqrt(dx * dx + dy * dy);
           const maxDist = 150;
           if (dist < maxDist) {
-            ctx.strokeStyle = `rgba(155,140,255,${(1 - dist / maxDist) * 0.18})`;
+            ctx.strokeStyle = `rgba(109,59,245,${(1 - dist / maxDist) * 0.22})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -154,15 +168,43 @@
           }
         }
       }
-      // nodes
+
+      // glowing pulsing nodes
       particles.forEach(p => {
+        p.pulse += 0.045;
+        const pulseR = p.r + Math.sin(p.pulse) * 0.8;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, pulseR * 3.2, 0, Math.PI * 2);
+        const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, pulseR * 3.2);
+        glow.addColorStop(0, p.color + "33");
+        glow.addColorStop(1, p.color + "00");
+        ctx.fillStyle = glow;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, pulseR, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
-        ctx.globalAlpha = 0.7;
+        ctx.globalAlpha = 0.85;
         ctx.fill();
         ctx.globalAlpha = 1;
       });
+
+      // traveling sparks along random connections
+      maybeSpawnSpark();
+      sparks = sparks.filter(s => s.p < 1);
+      sparks.forEach(s => {
+        s.p += 0.02;
+        const x = s.a.x + (s.b.x - s.a.x) * s.p;
+        const y = s.a.y + (s.b.y - s.a.y) * s.p;
+        ctx.beginPath();
+        ctx.arc(x, y, 2.4, 0, Math.PI * 2);
+        const g = ctx.createRadialGradient(x, y, 0, x, y, 8);
+        g.addColorStop(0, "#ffffff");
+        g.addColorStop(1, "#ffffff00");
+        ctx.fillStyle = g;
+        ctx.fill();
+      });
+
       requestAnimationFrame(step);
     };
 
@@ -249,46 +291,97 @@
   }
 
   /* ---------------------------------------------------------
-     Hero image slider
+     Dark mode toggle
+     No saved preference -- always starts in light mode on
+     every fresh visit/reload, as requested.
   --------------------------------------------------------- */
-  const heroSlider = document.getElementById("heroSlider");
-  if (heroSlider) {
-    const slides = Array.from(heroSlider.querySelectorAll(".hero-slider__slide"));
-    const dotsWrap = document.getElementById("heroDots");
-    const prevBtn = document.getElementById("heroPrev");
-    const nextBtn = document.getElementById("heroNext");
-    let current = 0;
-    let timer = null;
-
-    slides.forEach((_, i) => {
-      const dot = document.createElement("button");
-      dot.className = "hero-slider__dot" + (i === 0 ? " is-active" : "");
-      dot.setAttribute("aria-label", `Go to slide ${i + 1}`);
-      dot.addEventListener("click", () => { goTo(i); restart(); });
-      dotsWrap.appendChild(dot);
+  const themeToggle = document.getElementById("themeToggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const root = document.documentElement;
+      const isDark = root.getAttribute("data-theme") === "dark";
+      if (isDark) {
+        root.removeAttribute("data-theme");
+        themeToggle.setAttribute("aria-pressed", "false");
+      } else {
+        root.setAttribute("data-theme", "dark");
+        themeToggle.setAttribute("aria-pressed", "true");
+      }
     });
-    const dots = Array.from(dotsWrap.children);
+  }
 
-    function goTo(index) {
-      slides[current].classList.remove("is-active");
-      dots[current].classList.remove("is-active");
-      current = (index + slides.length) % slides.length;
-      slides[current].classList.add("is-active");
-      dots[current].classList.add("is-active");
+  /* ---------------------------------------------------------
+     Full-page photo slideshow
+     Auto-detects images named 1.jpg, 2.jpg, 3.jpg ... inside
+     assets/images/slideshow-1920x1080-16x9/. To add or change
+     photos, just add/replace numbered files in that folder --
+     no code edits needed. Supports .jpg, .jpeg, .png, .webp.
+  --------------------------------------------------------- */
+  const slideshowSection = document.getElementById("fullpageSlideshow");
+  if (slideshowSection) {
+    const track = document.getElementById("slideshowTrack");
+    const dotsWrap = document.getElementById("slideshowDots");
+    const folder = "assets/images/slideshow-1920x1080-16x9/";
+    const extensions = ["jpg", "jpeg", "png", "webp"];
+    const maxSlides = 20;
+
+    function probeImage(num) {
+      return new Promise((resolve) => {
+        let i = 0;
+        function tryExt() {
+          if (i >= extensions.length) return resolve(null);
+          const ext = extensions[i++];
+          const url = `${folder}${num}.${ext}`;
+          const img = new Image();
+          img.onload = () => resolve(url);
+          img.onerror = tryExt;
+          img.src = url;
+        }
+        tryExt();
+      });
     }
 
-    function start() {
-      if (prefersReducedMotion) return;
-      timer = setInterval(() => goTo(current + 1), 5000);
-    }
-    function stop() { if (timer) clearInterval(timer); }
-    function restart() { stop(); start(); }
+    (async function init() {
+      const found = [];
+      for (let n = 1; n <= maxSlides; n++) {
+        const url = await probeImage(n);
+        if (!url) break; // stop at first gap in numbering
+        found.push(url);
+      }
+      if (found.length === 0) return; // no photos uploaded yet
 
-    prevBtn.addEventListener("click", () => { goTo(current - 1); restart(); });
-    nextBtn.addEventListener("click", () => { goTo(current + 1); restart(); });
+      found.forEach((url, i) => {
+        const div = document.createElement("div");
+        div.className = "fullpage-slideshow__slide" + (i === 0 ? " is-active" : "");
+        div.style.backgroundImage = `url("${url}")`;
+        track.appendChild(div);
+      });
 
-    start();
-    heroSlider.addEventListener("mouseenter", stop);
-    heroSlider.addEventListener("mouseleave", start);
+      const slideEls = Array.from(track.children);
+
+      if (found.length > 1) {
+        found.forEach((_, i) => {
+          const dot = document.createElement("button");
+          dot.className = "fullpage-slideshow__dot" + (i === 0 ? " is-active" : "");
+          dot.setAttribute("aria-label", `Go to photo ${i + 1}`);
+          dot.addEventListener("click", () => goTo(i));
+          dotsWrap.appendChild(dot);
+        });
+        const dotEls = Array.from(dotsWrap.children);
+
+        let current = 0;
+        function goTo(index) {
+          slideEls[current].classList.remove("is-active");
+          dotEls[current].classList.remove("is-active");
+          current = (index + slideEls.length) % slideEls.length;
+          slideEls[current].classList.add("is-active");
+          dotEls[current].classList.add("is-active");
+        }
+
+        if (!prefersReducedMotion) {
+          setInterval(() => goTo(current + 1), 5000);
+        }
+      }
+    })();
   }
 })();

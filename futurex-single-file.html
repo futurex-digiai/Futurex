@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FutureXacademy — Digital, AI &amp; Design Studio in Kolkata</title>
-<meta name="description" content="FutureX Academy is a next-generation agency and learning studio in Kolkata, delivering innovative digital solutions, AI/ML development, website strategies, performance marketing, and graphic design.">
+<title>FutureXacademy — Digital, AI &amp; Design Studio in Haridwar</title>
+<meta name="description" content="FutureX Academy is a next-generation agency and learning studio in Haridwar, UP, delivering innovative digital solutions, AI/ML development, website strategies, performance marketing, and graphic design.">
 <meta name="theme-color" content="#FFFFFF">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,6 +52,38 @@
   --shadow-md: 0 8px 24px -8px rgba(20,21,43,0.12);
   --shadow-lg: 0 24px 60px -20px rgba(93,42,220,0.22);
 }
+
+/* =========================================================
+   Dark mode — soft charcoal/navy palette
+   Toggled by adding data-theme="dark" to <html> via JS.
+   Resets to light on every new visit (no saved preference).
+   ========================================================= */
+html[data-theme="dark"]{
+  --bg: #14151F;
+  --bg-soft: #191B27;
+  --ink: #F2F2F7;
+  --surface: #1B1D2A;
+  --surface-soft: #20222F;
+  --border: #2C2E3F;
+  --border-hi: #3A3D54;
+
+  --violet-tint: #6D3BF52a;
+  --azure-tint: #2563EB22;
+
+  --text: #F2F2F7;
+  --text-mute: #A7A8C0;
+  --text-faint: #74758F;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.28), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-md: 0 8px 24px -8px rgba(0,0,0,0.45);
+  --shadow-lg: 0 24px 60px -20px rgba(0,0,0,0.6);
+}
+html[data-theme="dark"] body{ background: var(--bg); }
+html[data-theme="dark"] .nav{ background: rgba(20,21,31,0.82); }
+html[data-theme="dark"] .nav.is-scrolled{ background: rgba(20,21,31,0.94); }
+html, body{ transition: background-color .35s ease, color .35s ease; }
+html[data-theme="dark"] .card__art::after{ background: linear-gradient(180deg, rgba(109,59,245,0.10), rgba(0,0,0,0.6)); }
+html[data-theme="dark"] .btn--outline{ color: var(--ink); border-color: var(--border-hi); }
 
 *,*::before,*::after{ box-sizing: border-box; }
 html{ scroll-behavior: smooth; }
@@ -115,6 +147,7 @@ button{ font-family: inherit; }
 
 .grid{ display:grid; gap: 20px; }
 .grid--4{ grid-template-columns: repeat(4, 1fr); }
+.grid--6{ grid-template-columns: repeat(3, 1fr); }
 
 .accent-bar{
   display:block; width:48px; height:3px; margin-top:14px; border-radius:99px;
@@ -173,11 +206,42 @@ button{ font-family: inherit; }
 .nav__links a:hover{ color: var(--ink); }
 .nav__links a:hover::after{ transform: scaleX(1); }
 .nav__actions{ display:flex; align-items:center; gap:10px; }
-.nav__toggle{ display:none; background:none; border:none; width:36px; height:36px; cursor:pointer; flex-direction:column; justify-content:center; gap:5px; }
-.nav__toggle span{ height:2px; background: var(--ink); border-radius:2px; transition: transform .25s ease, opacity .25s ease; }
-.nav__mobile{ max-height:0; overflow:hidden; display:flex; flex-direction:column; gap:2px; transition: max-height .35s var(--ease); font-family: var(--font-ui); font-weight:600; font-size:15px; }
-.nav__mobile a{ padding: 12px 6px; color: var(--text-mute); border-top: 1px solid var(--border); }
-.nav__mobile.is-open{ max-height: 320px; margin-top: 14px; }
+.theme-toggle{
+  display:grid; place-items:center; width:38px; height:38px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--surface); color: var(--ink);
+  cursor:pointer; flex-shrink:0; transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.theme-toggle:hover{ border-color: var(--border-hi); transform: translateY(-1px); }
+.theme-toggle svg{ display:block; }
+.theme-toggle .icon-moon{ display:none; }
+html[data-theme="dark"] .theme-toggle .icon-sun{ display:none; }
+html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
+.nav__toggle{
+  display:none; background:none; border:none; width:44px; height:44px; cursor:pointer;
+  flex-direction:column; align-items:center; justify-content:center; gap:5px;
+  border-radius: var(--radius-sm); -webkit-tap-highlight-color: transparent;
+}
+.nav__toggle:active{ background: var(--violet-tint); }
+.nav__toggle span{
+  width: 20px; height:2px; background: var(--ink); border-radius:2px;
+  transition: transform .3s var(--ease), opacity .2s ease, width .2s ease;
+}
+.nav__toggle[aria-expanded="true"] span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+.nav__toggle[aria-expanded="true"] span:nth-child(2){ opacity:0; }
+.nav__toggle[aria-expanded="true"] span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+
+.nav__mobile{
+  max-height:0; overflow:hidden; display:flex; flex-direction:column;
+  transition: max-height .4s var(--ease), opacity .3s ease;
+  font-family: var(--font-ui); font-weight:600; font-size:16px; opacity:0;
+}
+.nav__mobile a{
+  padding: 16px 8px; color: var(--text); border-top: 1px solid var(--border);
+  min-height: 48px; display:flex; align-items:center;
+  transition: color .2s ease, background .2s ease, padding-left .2s ease;
+}
+.nav__mobile a:active{ background: var(--violet-tint); color: var(--violet-dark); padding-left: 14px; }
+.nav__mobile.is-open{ max-height: 360px; margin-top: 14px; opacity:1; }
 
 @media (max-width: 860px){
   .nav__links, .nav__actions .btn--ghost{ display:none; }
@@ -185,17 +249,81 @@ button{ font-family: inherit; }
 }
 
 /* =========================================================
+   Navbar / footer logo (text-based, matches client's logo colors)
+   ========================================================= */
+.brand-word{ font-family: var(--font-display); font-weight: 800; letter-spacing: -0.01em; }
+.brand-word__future{ color: #172a63; }
+.brand-word__x{
+  background: linear-gradient(135deg, #1c3fae 0%, #2e8fe0 55%, #56cdf0 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.nav__brand .brand-word{ font-size: 22px; }
+.footer__brand .brand-word{ font-size: 22px; }
+
+/* =========================================================
+   Full-page photo slideshow
+   ========================================================= */
+.fullpage-slideshow{
+  position: relative; width: 100%; height: 100vh; min-height: 480px;
+  overflow: hidden; background: var(--ink);
+}
+.fullpage-slideshow__track{ position:absolute; inset:0; }
+.fullpage-slideshow__slide{
+  position:absolute; inset:0; width:100%; height:100%;
+  background-size: cover; background-position: center; opacity:0;
+  transition: opacity 1.2s ease;
+}
+.fullpage-slideshow__slide.is-active{ opacity:1; }
+.fullpage-slideshow__overlay{
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background: linear-gradient(180deg, rgba(10,6,30,.45) 0%, rgba(10,6,30,.15) 40%, rgba(10,6,30,.55) 100%);
+}
+.fullpage-slideshow__dots{
+  position:absolute; z-index:2; left:0; right:0; bottom:26px;
+  display:flex; justify-content:center; gap:8px;
+}
+.fullpage-slideshow__dot{
+  width:8px; height:8px; border-radius:50%; border:none; padding:0; cursor:pointer;
+  background: rgba(255,255,255,.5); transition: background .3s ease, width .3s ease;
+}
+.fullpage-slideshow__dot.is-active{ background:#fff; width:26px; border-radius:999px; }
+.fullpage-slideshow__scroll{
+  position:absolute; z-index:2; left:50%; bottom:64px; transform:translateX(-50%);
+  color:#fff; opacity:.8; animation: bounce 2s ease-in-out infinite;
+}
+@keyframes bounce{ 0%,100%{ transform:translate(-50%,0);} 50%{ transform:translate(-50%,8px);} }
+@media (prefers-reduced-motion: reduce){ .fullpage-slideshow__scroll{ animation:none; } .fullpage-slideshow__slide{ transition:none; } }
+
+/* =========================================================
    Hero
    ========================================================= */
 .hero{ position:relative; padding: 96px 24px 72px; overflow:hidden; display:flex; flex-direction: column; align-items:center; background: linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 60%); }
-.hero__canvas{ position:absolute; inset:0; width:100%; height:100%; opacity:.12; }
-.hero__glow{ position:absolute; border-radius:50%; filter: blur(100px); pointer-events:none; opacity:.22; }
+.hero__canvas{ position:absolute; inset:0; width:100%; height:100%; opacity:.55; }
+.hero__glow{ position:absolute; border-radius:50%; filter: blur(100px); pointer-events:none; opacity:.28; animation: drift 14s ease-in-out infinite alternate; }
 .hero__glow--1{ width:520px; height:520px; background: var(--violet); top:-200px; left:-140px; }
-.hero__glow--2{ width:460px; height:460px; background: var(--azure); bottom:-200px; right:-120px; }
+.hero__glow--2{ width:460px; height:460px; background: var(--azure); bottom:-200px; right:-120px; animation-delay: -6s; }
+@keyframes drift{
+  0%{ transform: translate(0,0) scale(1); }
+  100%{ transform: translate(30px,25px) scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce){ .hero__glow{ animation: none; } }
 
 .hero__inner{ position:relative; z-index:2; max-width: 760px; text-align:center; }
 .hero__inner .eyebrow{ justify-content:center; display:flex; }
-.hero__title{ font-size: clamp(36px, 5.6vw, 60px); line-height: 1.1; margin-top: 20px; letter-spacing: -0.03em; color: var(--ink); }
+.hero__title{ margin-top: 20px; }
+.hero__brand{ display:block; font-size: clamp(48px, 8.5vw, 88px); line-height: 1; }
+.hero__brand .brand-word{ font-size: inherit; }
+.hero__tagline-main{
+  display:block; font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(22px, 3.6vw, 36px); line-height: 1.2; letter-spacing: -0.01em;
+  margin-top: 12px; color: #1d5fd6;
+}
+.hero__tagline-main .tag-ai{ color: #e0222c; }
+.hero__tagline-sub{
+  display:block; font-family: var(--font-ui); font-weight: 700; font-size: 13px;
+  letter-spacing: .22em; text-transform: uppercase; color: #4fa8e8; margin-top: 16px;
+}
+@media (max-width: 560px){ .hero__tagline-sub{ letter-spacing: .12em; font-size: 11.5px; } }
 .hero__sub{ color: var(--text-mute); font-size: 18px; line-height:1.7; max-width: 560px; margin: 20px auto 0; }
 .hero__actions{ display:flex; gap:14px; justify-content:center; margin-top: 34px; flex-wrap:wrap; }
 
@@ -273,8 +401,8 @@ button{ font-family: inherit; }
 .card__list li{ font-family: var(--font-ui); font-size: 13.5px; color: var(--text-mute); padding-left: 16px; position:relative; }
 .card__list li::before{ content:""; position:absolute; left:0; top:8px; width:5px; height:5px; border-radius:50%; background: var(--violet); }
 
-@media (max-width: 980px){ .grid--4{ grid-template-columns: repeat(2,1fr); } }
-@media (max-width: 560px){ .grid--4{ grid-template-columns: 1fr; } }
+@media (max-width: 980px){ .grid--4{ grid-template-columns: repeat(2,1fr); } .grid--6{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 560px){ .grid--4{ grid-template-columns: 1fr; } .grid--6{ grid-template-columns: 1fr; } }
 
 /* =========================================================
    Split / mini cards (Why FutureX)
@@ -286,11 +414,10 @@ button{ font-family: inherit; }
   transition: border-color .25s ease, transform .25s var(--ease), box-shadow .25s ease;
 }
 .mini-card:hover{ border-color: var(--border-hi); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
-.mini-card__art{
-  width:52px; height:52px; border-radius: var(--radius-sm); overflow:hidden; flex-shrink:0;
-  border: 1px solid var(--border);
+.mini-card__icon{
+  width:44px; height:44px; border-radius: var(--radius-sm); overflow:hidden; flex-shrink:0;
+  display:grid; place-items:center; background: var(--violet-tint); color: var(--violet);
 }
-.mini-card__art img{ width:100%; height:100%; object-fit:cover; }
 .mini-card h4{ font-size:15px; margin-bottom:5px; color: var(--ink); }
 .mini-card p{ font-size: 13.5px; color: var(--text-mute); line-height:1.6; }
 
@@ -373,8 +500,7 @@ button{ font-family: inherit; }
 <header class="nav" id="nav">
   <div class="nav__inner">
     <a href="#" class="nav__brand">
-      <span class="nav__mark" aria-hidden="true">F</span>
-      FutureX<span>academy</span>
+      <span class="brand-word"><span class="brand-word__future">Future</span><span class="brand-word__x">X</span></span>
     </a>
 
     <nav class="nav__links" aria-label="Primary">
@@ -384,6 +510,10 @@ button{ font-family: inherit; }
     </nav>
 
     <div class="nav__actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/></svg>
+      </button>
       <a href="#contact" class="btn btn--primary btn--magnetic">Get in touch</a>
     </div>
 
@@ -402,6 +532,20 @@ button{ font-family: inherit; }
 
 <main id="main">
 
+  <!-- ===================== FULL-PAGE PHOTO SLIDESHOW ===================== -->
+  <!-- To add/change photos: just drop image files into
+       assets/images/slideshow-1920x1080-16x9/ named 1.jpg, 2.jpg, 3.jpg ...
+       (numbered in order, no gaps). Landscape photos, ~1920x1080 (16:9),
+       under ~500KB each work best. No code changes needed. -->
+  <section class="fullpage-slideshow" id="fullpageSlideshow" aria-label="FutureX showcase">
+    <div class="fullpage-slideshow__track" id="slideshowTrack"></div>
+    <div class="fullpage-slideshow__overlay"></div>
+    <div class="fullpage-slideshow__dots" id="slideshowDots"></div>
+    <div class="fullpage-slideshow__scroll" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+    </div>
+  </section>
+
   <!-- ===================== HERO ===================== -->
   <section class="hero">
     <canvas id="constellation" class="hero__canvas" aria-hidden="true"></canvas>
@@ -411,11 +555,12 @@ button{ font-family: inherit; }
     <div class="hero__inner reveal">
       <p class="eyebrow eyebrow--pill"><span class="eyebrow__dot"></span> AI &bull; DESIGN &bull; DEVELOPMENT &bull; GROWTH</p>
       <h1 class="hero__title">
-        Build your future in<br>
-        <span class="text-gradient">digital, AI &amp; design</span>
+        <span class="hero__brand brand-word"><span class="brand-word__future">Future</span><span class="brand-word__x">X</span></span>
+        <span class="hero__tagline-main">Digi <span class="tag-ai">AI</span> Academy and Labs</span>
+        <span class="hero__tagline-sub">&raquo;&raquo;&raquo; Learn Today, Lead Tomorrow &laquo;&laquo;&laquo;</span>
       </h1>
       <p class="hero__sub">
-        FutureX Academy is a next-generation agency and learning studio in Kolkata,
+        FutureX Academy is a next-generation agency and learning studio in Haridwar, UP,
         delivering innovative digital solutions, AI/ML development, website strategies,
         performance marketing, and graphic design.
       </p>
@@ -430,7 +575,7 @@ button{ font-family: inherit; }
 
       <div class="hero__stats">
         <div class="stat">
-          <span class="stat__num" data-count="4">0</span>
+          <span class="stat__num" data-count="6">0</span>
           <span class="stat__label">Core Disciplines</span>
         </div>
         <div class="stat__divider" aria-hidden="true"></div>
@@ -446,57 +591,19 @@ button{ font-family: inherit; }
       </div>
     </div>
 
-    <!-- ============= HERO IMAGE SLIDER ============= -->
-    <div class="hero-slider reveal" id="heroSlider" aria-roledescription="carousel" aria-label="FutureX showcase">
-      <div class="hero-slider__track">
-        <figure class="hero-slider__slide is-active" data-slide="0">
-          <img src="assets/images/hero-ai.jpg" alt="Artificial intelligence development at FutureX Academy" loading="eager">
-          <div class="hero-slider__overlay"></div>
-          <figcaption><span>Artificial Intelligence</span>Smarter systems, built and taught in-house.</figcaption>
-        </figure>
-        <figure class="hero-slider__slide" data-slide="1">
-          <img src="assets/images/hero-ai-class.jpg" alt="AI class in session at FutureX Academy" loading="lazy">
-          <div class="hero-slider__overlay"></div>
-          <figcaption><span>Live AI Classes</span>Cohort-based learning with real mentors.</figcaption>
-        </figure>
-        <figure class="hero-slider__slide" data-slide="2">
-          <img src="assets/images/hero-digital-marketing.jpg" alt="Digital marketing strategy at FutureX Academy" loading="lazy">
-          <div class="hero-slider__overlay"></div>
-          <figcaption><span>Digital Marketing</span>Growth strategy backed by real data.</figcaption>
-        </figure>
-        <figure class="hero-slider__slide" data-slide="3">
-          <img src="assets/images/hero-graphic-design.jpg" alt="Graphic design work at FutureX Academy" loading="lazy">
-          <div class="hero-slider__overlay"></div>
-          <figcaption><span>Graphic Design</span>Visual identity that carries a brand.</figcaption>
-        </figure>
-        <figure class="hero-slider__slide" data-slide="4">
-          <img src="assets/images/hero-programming.jpg" alt="Programming and web development at FutureX Academy" loading="lazy">
-          <div class="hero-slider__overlay"></div>
-          <figcaption><span>Programming</span>Future-proof code for apps and web.</figcaption>
-        </figure>
-      </div>
-
-      <button class="hero-slider__arrow hero-slider__arrow--prev" id="heroPrev" aria-label="Previous slide">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <button class="hero-slider__arrow hero-slider__arrow--next" id="heroNext" aria-label="Next slide">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
-      <div class="hero-slider__dots" id="heroDots"></div>
-    </div>
   </section>
 
   <!-- ===================== SERVICES / DISCIPLINES ===================== -->
   <section class="section" id="services">
     <div class="section__head reveal">
       <p class="eyebrow eyebrow--center"><span class="eyebrow__dot"></span> What we do</p>
-      <h2 class="section__title">Four disciplines. One<br>future-ready studio.<span class="accent-bar" style="margin-left:auto;margin-right:auto;"></span></h2>
+      <h2 class="section__title">Six disciplines. One<br>future-ready studio.<span class="accent-bar" style="margin-left:auto;margin-right:auto;"></span></h2>
       <p class="section__sub">Learn, build, and brand with excellence — all under one roof, shaping the future every day.</p>
     </div>
 
-    <div class="grid grid--4" id="disciplineGrid">
+    <div class="grid grid--6" id="disciplineGrid">
       <article class="card reveal" style="--d:0">
-        <div class="card__art"><img src="assets/images/card-digital-marketing.jpg" alt="Digital marketing campaign visual" loading="lazy"></div>
+        <div class="card__art"><img src="assets/images/site-photos/card-digital-marketing-16x10.jpg" alt="Digital marketing campaign visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c2.5 2.5 4 5.7 4 9.5 0 2-1 4-1 4l-6 0s-1-2-1-4c0-3.8 1.5-7 4-9.5z"/><circle cx="12" cy="10" r="1.6"/><path d="M9 15.5 7 20l2.5-1.2M15 15.5l2 4.5-2.5-1.2"/></svg>
         </div>
@@ -510,7 +617,7 @@ button{ font-family: inherit; }
       </article>
 
       <article class="card reveal" style="--d:1">
-        <div class="card__art"><img src="assets/images/card-ai.jpg" alt="Artificial intelligence visual" loading="lazy"></div>
+        <div class="card__art"><img src="assets/images/site-photos/card-ai-16x10.jpg" alt="Artificial intelligence visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1.5 5.6A3 3 0 0 0 7 17a3 3 0 0 0 5 2.2A3 3 0 0 0 17 17a3 3 0 0 0 2.5-4.4A3 3 0 0 0 18 7a3 3 0 0 0-3-3 2.9 2.9 0 0 0-3 1 2.9 2.9 0 0 0-3-1z"/><path d="M9 9.5h.01M15 9.5h.01M9 14h.01M15 14h.01M12 4v16"/></svg>
         </div>
@@ -525,7 +632,7 @@ button{ font-family: inherit; }
       </article>
 
       <article class="card reveal" style="--d:2">
-        <div class="card__art"><img src="assets/images/card-programming.jpg" alt="Programming and code visual" loading="lazy"></div>
+        <div class="card__art"><img src="assets/images/site-photos/card-programming-16x10.jpg" alt="Programming and code visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4L3 12l5 8M16 4l5 8-5 8"/></svg>
         </div>
@@ -539,7 +646,7 @@ button{ font-family: inherit; }
       </article>
 
       <article class="card reveal" style="--d:3">
-        <div class="card__art"><img src="assets/images/card-graphic-design.jpg" alt="Graphic design poster visual" loading="lazy"></div>
+        <div class="card__art"><img src="assets/images/site-photos/card-graphic-design-16x10.jpg" alt="Graphic design poster visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.6 7.6"/><circle cx="11" cy="11" r="2"/></svg>
         </div>
@@ -549,6 +656,34 @@ button{ font-family: inherit; }
           <li>Brand Identity</li>
           <li>UI/UX Design</li>
           <li>Visual &amp; Motion</li>
+        </ul>
+      </article>
+
+      <article class="card reveal" style="--d:4">
+        <div class="card__art"><img src="assets/images/site-photos/card-tally-16x10.jpg" alt="Tally Prime accounting software visual" loading="lazy"></div>
+        <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+        </div>
+        <h3>Tally Prime (GST + ERP)</h3>
+        <p>Practical accounting and business software training for real-world finance roles.</p>
+        <ul class="card__list">
+          <li>Tally Prime Basics &amp; Advanced</li>
+          <li>GST Filing &amp; Compliance</li>
+          <li>ERP &amp; Inventory Management</li>
+        </ul>
+      </article>
+
+      <article class="card reveal" style="--d:5">
+        <div class="card__art"><img src="assets/images/site-photos/card-social-media-16x10.jpg" alt="Social media management visual" loading="lazy"></div>
+        <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2.3"/><circle cx="18" cy="6" r="2.3"/><circle cx="18" cy="18" r="2.3"/><path d="M7 10.8l9-3.6M7 13.2l9 3.6"/></svg>
+        </div>
+        <h3>Social Media Agency</h3>
+        <p>End-to-end social presence management that builds real audiences.</p>
+        <ul class="card__list">
+          <li>Content Planning &amp; Posting</li>
+          <li>Community Management</li>
+          <li>Paid Social Campaigns</li>
         </ul>
       </article>
     </div>
@@ -567,22 +702,30 @@ button{ font-family: inherit; }
 
     <div class="split__grid">
       <div class="mini-card reveal" style="--d:0">
-        <div class="mini-card__art"><img src="assets/images/hero-ai.jpg" alt="" loading="lazy"></div>
+        <div class="mini-card__icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6a2 2 0 0 1 2-2h9l5 5v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M15 4v5h5M9 13h6M9 17h6"/></svg>
+        </div>
         <h4>Learning by building</h4>
         <p>Practical, real-world learning through live projects and real clients.</p>
       </div>
       <div class="mini-card reveal" style="--d:1">
-        <div class="mini-card__art"><img src="assets/images/hero-ai-class.jpg" alt="" loading="lazy"></div>
+        <div class="mini-card__icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3-6.2 7-6.2s7 2.6 7 6.2"/></svg>
+        </div>
         <h4>Expert mentors</h4>
         <p>Industry professionals guiding you every step of the way.</p>
       </div>
       <div class="mini-card reveal" style="--d:2">
-        <div class="mini-card__art"><img src="assets/images/hero-graphic-design.jpg" alt="" loading="lazy"></div>
+        <div class="mini-card__icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l5-11 4 6 3-4 4 9"/><circle cx="18" cy="6" r="2.4"/></svg>
+        </div>
         <h4>Outcome ready</h4>
         <p>Portfolio, internship, and job-ready skills to launch your career forward.</p>
       </div>
       <div class="mini-card reveal" style="--d:3">
-        <div class="mini-card__art"><img src="assets/images/hero-digital-marketing.jpg" alt="" loading="lazy"></div>
+        <div class="mini-card__icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.3L18 9l-4.1 1.7L12 15l-1.9-4.3L6 9l4.1-1.7L12 3z"/><path d="M19 15l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9.9-2z"/></svg>
+        </div>
         <h4>Relevant practical skills</h4>
         <p>Curriculum that matches industry demands and real-world working.</p>
       </div>
@@ -600,15 +743,15 @@ button{ font-family: inherit; }
         <ul class="contact__list">
           <li>
             <span class="contact__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
-            <span><strong>Visit us</strong><br>21, Radhanath Temple Building, near Gariahat Beverly Club, Garia More, Kolkata, West Bengal</span>
+            <span><strong>Visit us</strong><br>376, 2nd Floor, Topman Building, Vivek Vihar, near Bansal Dental Clinic, Haridwar, UP</span>
           </li>
           <li>
             <span class="contact__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
-            <span><strong>Email us</strong><br><a href="mailto:hello@futurexacademy.com">hello@futurexacademy.com</a></span>
+            <span><strong>Email us</strong><br><a href="mailto:join.futurex@gmail.com">join.futurex@gmail.com</a></span>
           </li>
           <li>
             <span class="contact__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2z"/></svg></span>
-            <span><strong>Call us</strong><br><a href="tel:+918240364977">+91 8240364977</a></span>
+            <span><strong>Call us</strong><br><a href="tel:+918679144434">86791 44434</a></span>
           </li>
         </ul>
       </div>
@@ -659,8 +802,7 @@ button{ font-family: inherit; }
   <div class="footer__inner">
     <div class="footer__brand">
       <a href="#" class="nav__brand">
-        <span class="nav__mark" aria-hidden="true">F</span>
-        FutureX<span>academy</span>
+          <span class="brand-word"><span class="brand-word__future">Future</span><span class="brand-word__x">X</span></span>
       </a>
       <p>A future-focused agency and learning studio for digital, AI, coding &amp; design — empowering creators &amp; brands.</p>
     </div>
@@ -674,8 +816,8 @@ button{ font-family: inherit; }
 
     <div class="footer__col">
       <h5>Reach us</h5>
-      <p>21, Radhanath Temple Building, near Gariahat Beverly Club, Garia More, Kolkata, West Bengal</p>
-      <a href="mailto:hello@futurexacademy.com">hello@futurexacademy.com</a>
+      <p>376, 2nd Floor, Topman Building, Vivek Vihar, near Bansal Dental Clinic, Haridwar, UP</p>
+      <a href="mailto:join.futurex@gmail.com">join.futurex@gmail.com</a>
     </div>
   </div>
 
@@ -789,16 +931,17 @@ button{ font-family: inherit; }
   }
 
   /* ---------------------------------------------------------
-     Hero constellation canvas — four glowing nodes
-     (Marketing / AI / Code / Design) drifting and connecting,
-     echoing the "four disciplines, one studio" idea.
+     Hero neural-network canvas — glowing purple/blue nodes,
+     pulsing connections, occasional "spark" bursts for a
+     lively, dopamine-friendly ambient background.
   --------------------------------------------------------- */
   const canvas = document.getElementById("constellation");
   if (canvas && !prefersReducedMotion) {
     const ctx = canvas.getContext("2d");
-    let w, h, dpr;
+    let w, h, dpr, t = 0;
     let particles = [];
-    const COLORS = ["#F2B84B", "#9B8CFF", "#6FA0FF", "#FF93A8"];
+    let sparks = [];
+    const COLORS = ["#6D3BF5", "#2563EB", "#8B5CF6", "#3B82F6"];
 
     const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -810,24 +953,37 @@ button{ font-family: inherit; }
     };
 
     const initParticles = () => {
-      const count = w < 640 ? 18 : 32;
+      const count = w < 640 ? 22 : 42;
       particles = Array.from({ length: count }, (_, i) => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
-        r: 1 + Math.random() * 1.6,
+        vx: (Math.random() - 0.5) * 0.32,
+        vy: (Math.random() - 0.5) * 0.32,
+        r: 1.6 + Math.random() * 2.2,
+        pulse: Math.random() * Math.PI * 2,
         color: COLORS[i % COLORS.length]
       }));
     };
 
+    // Occasional bright "spark" that travels along a connection —
+    // the small unexpected flash is the deliberate dopamine touch.
+    const maybeSpawnSpark = () => {
+      if (sparks.length > 2 || Math.random() > 0.012) return;
+      const a = particles[Math.floor(Math.random() * particles.length)];
+      const b = particles[Math.floor(Math.random() * particles.length)];
+      const dist = Math.hypot(a.x - b.x, a.y - b.y);
+      if (dist > 0 && dist < 170) sparks.push({ a, b, p: 0 });
+    };
+
     const step = () => {
+      t += 0.02;
       ctx.clearRect(0, 0, w, h);
       particles.forEach(p => {
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0 || p.x > w) p.vx *= -1;
         if (p.y < 0 || p.y > h) p.vy *= -1;
       });
+
       // connections
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -836,7 +992,7 @@ button{ font-family: inherit; }
           const dist = Math.sqrt(dx * dx + dy * dy);
           const maxDist = 150;
           if (dist < maxDist) {
-            ctx.strokeStyle = `rgba(155,140,255,${(1 - dist / maxDist) * 0.18})`;
+            ctx.strokeStyle = `rgba(109,59,245,${(1 - dist / maxDist) * 0.22})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -845,15 +1001,43 @@ button{ font-family: inherit; }
           }
         }
       }
-      // nodes
+
+      // glowing pulsing nodes
       particles.forEach(p => {
+        p.pulse += 0.045;
+        const pulseR = p.r + Math.sin(p.pulse) * 0.8;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, pulseR * 3.2, 0, Math.PI * 2);
+        const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, pulseR * 3.2);
+        glow.addColorStop(0, p.color + "33");
+        glow.addColorStop(1, p.color + "00");
+        ctx.fillStyle = glow;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, pulseR, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
-        ctx.globalAlpha = 0.7;
+        ctx.globalAlpha = 0.85;
         ctx.fill();
         ctx.globalAlpha = 1;
       });
+
+      // traveling sparks along random connections
+      maybeSpawnSpark();
+      sparks = sparks.filter(s => s.p < 1);
+      sparks.forEach(s => {
+        s.p += 0.02;
+        const x = s.a.x + (s.b.x - s.a.x) * s.p;
+        const y = s.a.y + (s.b.y - s.a.y) * s.p;
+        ctx.beginPath();
+        ctx.arc(x, y, 2.4, 0, Math.PI * 2);
+        const g = ctx.createRadialGradient(x, y, 0, x, y, 8);
+        g.addColorStop(0, "#ffffff");
+        g.addColorStop(1, "#ffffff00");
+        ctx.fillStyle = g;
+        ctx.fill();
+      });
+
       requestAnimationFrame(step);
     };
 
@@ -940,47 +1124,98 @@ button{ font-family: inherit; }
   }
 
   /* ---------------------------------------------------------
-     Hero image slider
+     Dark mode toggle
+     No saved preference -- always starts in light mode on
+     every fresh visit/reload, as requested.
   --------------------------------------------------------- */
-  const heroSlider = document.getElementById("heroSlider");
-  if (heroSlider) {
-    const slides = Array.from(heroSlider.querySelectorAll(".hero-slider__slide"));
-    const dotsWrap = document.getElementById("heroDots");
-    const prevBtn = document.getElementById("heroPrev");
-    const nextBtn = document.getElementById("heroNext");
-    let current = 0;
-    let timer = null;
-
-    slides.forEach((_, i) => {
-      const dot = document.createElement("button");
-      dot.className = "hero-slider__dot" + (i === 0 ? " is-active" : "");
-      dot.setAttribute("aria-label", `Go to slide ${i + 1}`);
-      dot.addEventListener("click", () => { goTo(i); restart(); });
-      dotsWrap.appendChild(dot);
+  const themeToggle = document.getElementById("themeToggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const root = document.documentElement;
+      const isDark = root.getAttribute("data-theme") === "dark";
+      if (isDark) {
+        root.removeAttribute("data-theme");
+        themeToggle.setAttribute("aria-pressed", "false");
+      } else {
+        root.setAttribute("data-theme", "dark");
+        themeToggle.setAttribute("aria-pressed", "true");
+      }
     });
-    const dots = Array.from(dotsWrap.children);
+  }
 
-    function goTo(index) {
-      slides[current].classList.remove("is-active");
-      dots[current].classList.remove("is-active");
-      current = (index + slides.length) % slides.length;
-      slides[current].classList.add("is-active");
-      dots[current].classList.add("is-active");
+  /* ---------------------------------------------------------
+     Full-page photo slideshow
+     Auto-detects images named 1.jpg, 2.jpg, 3.jpg ... inside
+     assets/images/slideshow-1920x1080-16x9/. To add or change
+     photos, just add/replace numbered files in that folder --
+     no code edits needed. Supports .jpg, .jpeg, .png, .webp.
+  --------------------------------------------------------- */
+  const slideshowSection = document.getElementById("fullpageSlideshow");
+  if (slideshowSection) {
+    const track = document.getElementById("slideshowTrack");
+    const dotsWrap = document.getElementById("slideshowDots");
+    const folder = "assets/images/slideshow-1920x1080-16x9/";
+    const extensions = ["jpg", "jpeg", "png", "webp"];
+    const maxSlides = 20;
+
+    function probeImage(num) {
+      return new Promise((resolve) => {
+        let i = 0;
+        function tryExt() {
+          if (i >= extensions.length) return resolve(null);
+          const ext = extensions[i++];
+          const url = `${folder}${num}.${ext}`;
+          const img = new Image();
+          img.onload = () => resolve(url);
+          img.onerror = tryExt;
+          img.src = url;
+        }
+        tryExt();
+      });
     }
 
-    function start() {
-      if (prefersReducedMotion) return;
-      timer = setInterval(() => goTo(current + 1), 5000);
-    }
-    function stop() { if (timer) clearInterval(timer); }
-    function restart() { stop(); start(); }
+    (async function init() {
+      const found = [];
+      for (let n = 1; n <= maxSlides; n++) {
+        const url = await probeImage(n);
+        if (!url) break; // stop at first gap in numbering
+        found.push(url);
+      }
+      if (found.length === 0) return; // no photos uploaded yet
 
-    prevBtn.addEventListener("click", () => { goTo(current - 1); restart(); });
-    nextBtn.addEventListener("click", () => { goTo(current + 1); restart(); });
+      found.forEach((url, i) => {
+        const div = document.createElement("div");
+        div.className = "fullpage-slideshow__slide" + (i === 0 ? " is-active" : "");
+        div.style.backgroundImage = `url("${url}")`;
+        track.appendChild(div);
+      });
 
-    start();
-    heroSlider.addEventListener("mouseenter", stop);
-    heroSlider.addEventListener("mouseleave", start);
+      const slideEls = Array.from(track.children);
+
+      if (found.length > 1) {
+        found.forEach((_, i) => {
+          const dot = document.createElement("button");
+          dot.className = "fullpage-slideshow__dot" + (i === 0 ? " is-active" : "");
+          dot.setAttribute("aria-label", `Go to photo ${i + 1}`);
+          dot.addEventListener("click", () => goTo(i));
+          dotsWrap.appendChild(dot);
+        });
+        const dotEls = Array.from(dotsWrap.children);
+
+        let current = 0;
+        function goTo(index) {
+          slideEls[current].classList.remove("is-active");
+          dotEls[current].classList.remove("is-active");
+          current = (index + slideEls.length) % slideEls.length;
+          slideEls[current].classList.add("is-active");
+          dotEls[current].classList.add("is-active");
+        }
+
+        if (!prefersReducedMotion) {
+          setInterval(() => goTo(current + 1), 5000);
+        }
+      }
+    })();
   }
 })();
 
