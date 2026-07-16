@@ -142,7 +142,9 @@
       if (dist > 0 && dist < 170) sparks.push({ a, b, p: 0 });
     };
 
+    let isRunning = false;
     const step = () => {
+      if (!isRunning) return;
       t += 0.02;
       ctx.clearRect(0, 0, w, h);
       particles.forEach(p => {
@@ -208,9 +210,32 @@
       requestAnimationFrame(step);
     };
 
+    let isVisible = true; // in-viewport
+    let isPageVisible = !document.hidden;
+
+    const startLoop = () => {
+      if (isRunning) return;
+      isRunning = true;
+      requestAnimationFrame(step);
+    };
+    const stopLoop = () => { isRunning = false; };
+
     resize();
     initParticles();
-    requestAnimationFrame(step);
+
+    // Only animate while the hero canvas is actually on screen
+    const canvasIo = new IntersectionObserver((entries) => {
+      isVisible = entries[0].isIntersecting;
+      if (isVisible && isPageVisible) startLoop(); else stopLoop();
+    }, { threshold: 0 });
+    canvasIo.observe(canvas);
+
+    // Also pause when the browser tab itself isn't visible
+    document.addEventListener("visibilitychange", () => {
+      isPageVisible = !document.hidden;
+      if (isVisible && isPageVisible) startLoop(); else stopLoop();
+    });
+
     window.addEventListener("resize", () => { resize(); initParticles(); }, { passive: true });
   }
 
@@ -227,6 +252,7 @@
       name: (v) => v.trim().length > 1,
       email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
       interest: (v) => v.trim().length > 0,
+      mode: (v) => v.trim().length > 0,
       message: (v) => v.trim().length > 4
     };
 
@@ -264,6 +290,7 @@
           name: form.querySelector("[name=name]").value.trim(),
           email: form.querySelector("[name=email]").value.trim(),
           interested_in: form.querySelector("[name=interest]").value.trim(),
+          course_mode: form.querySelector("[name=mode]").value.trim(),
           message: form.querySelector("[name=message]").value.trim()
         };
 
@@ -311,16 +338,20 @@
   }
 
   /* ---------------------------------------------------------
-     Full-page photo slideshow
-     Auto-detects images named 1.jpg, 2.jpg, 3.jpg ... inside
-     assets/images/slideshow-1920x1080-16x9/. To add or change
-     photos, just add/replace numbered files in that folder --
-     no code edits needed. Supports .jpg, .jpeg, .png, .webp.
+     Full-page intro video + photo slideshow
+     Plays assets/video/intro.mp4 once first (if present), then
+     switches to auto-detected photos named 1.jpg, 2.jpg, 3.jpg ...
+     inside assets/images/slideshow-1920x1080-16x9/, changing
+     every 5 seconds. To change the video, replace
+     assets/video/intro.mp4 (same filename). To add/change photos,
+     just add/replace numbered files in that folder -- no code
+     edits needed. Supports .jpg, .jpeg, .png, .webp.
   --------------------------------------------------------- */
   const slideshowSection = document.getElementById("fullpageSlideshow");
   if (slideshowSection) {
     const track = document.getElementById("slideshowTrack");
     const dotsWrap = document.getElementById("slideshowDots");
+    const introVideo = document.getElementById("slideshowIntroVideo");
     const folder = "assets/images/slideshow-1920x1080-16x9/";
     const extensions = ["jpg", "jpeg", "png", "webp"];
     const maxSlides = 20;
@@ -341,7 +372,7 @@
       });
     }
 
-    (async function init() {
+    async function startPhotoSlideshow() {
       const found = [];
       for (let n = 1; n <= maxSlides; n++) {
         const url = await probeImage(n);
@@ -382,6 +413,28 @@
           setInterval(() => goTo(current + 1), 5000);
         }
       }
-    })();
+    }
+
+    function handOffToPhotos() {
+      if (!introVideo) { startPhotoSlideshow(); return; }
+      introVideo.classList.add("is-hidden");
+      setTimeout(() => introVideo.remove(), 1000); // after fade-out transition
+      startPhotoSlideshow();
+    }
+
+    if (introVideo) {
+      // Play once, then hand off to the photo slideshow.
+      introVideo.addEventListener("ended", handOffToPhotos, { once: true });
+      // If the video file is missing/fails to load, skip straight to photos.
+      introVideo.addEventListener("error", handOffToPhotos, { once: true });
+      // Respect reduced-motion preference -- skip the video and go straight to photos.
+      if (prefersReducedMotion) {
+        handOffToPhotos();
+      } else {
+        introVideo.play().catch(handOffToPhotos);
+      }
+    } else {
+      startPhotoSlideshow();
+    }
   }
 })();

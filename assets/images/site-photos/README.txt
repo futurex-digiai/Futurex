@@ -12,13 +12,8 @@ FILES & WHERE THEY SHOW UP:
   card-programming-16x10.jpg         -> "Programming Language" service card
   card-graphic-design-16x10.jpg      -> "Graphic Design" service card
   card-tally-16x10.jpg               -> "Tally Prime (GST + ERP)" service card
-  card-social-media-16x10.jpg        -> "Social Media Agency" service card
+  card-ms-office-16x10.jpg           -> "MS Office & Office Automation" service card
       Ratio: 16:10 (landscape). ~1200x750px recommended.
-
-NOTE: card-tally-16x10.jpg and card-social-media-16x10.jpg are
-currently placeholders (reused from other cards) since no real photo
-was provided for these two yet -- replace them with real photos
-whenever you have them, same filename, same way as any other card.
 
 HOW TO CHANGE A PHOTO:
 - Rename your new photo to match the exact filename above

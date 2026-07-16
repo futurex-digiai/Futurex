@@ -1,8 +1,9 @@
 FULL-PAGE SLIDESHOW PHOTOS
 ===========================
 
-This folder feeds the full-page photo slideshow at the top of the website.
-It changes photo automatically every 5 seconds.
+These photos play AFTER the intro video (see assets/video/) finishes,
+in the full-page slideshow at the top of the website. They change
+automatically every 5 seconds and loop forever.
 
 HOW TO ADD OR CHANGE PHOTOS:
 - Just name your files 1.jpg, 2.jpg, 3.jpg, 4.jpg ... in the order you

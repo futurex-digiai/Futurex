@@ -20,6 +20,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 $name          = trim($data['name'] ?? '');
 $email         = trim($data['email'] ?? '');
 $interested_in = trim($data['interested_in'] ?? '');
+$course_mode   = trim($data['course_mode'] ?? '');
 $message       = trim($data['message'] ?? '');
 
 // Basic server-side validation -- never trust the browser alone
@@ -39,9 +40,9 @@ try {
     );
 
     $stmt = $pdo->prepare(
-        "INSERT INTO leads (name, email, interested_in, message) VALUES (?, ?, ?, ?)"
+        "INSERT INTO leads (name, email, interested_in, course_mode, message) VALUES (?, ?, ?, ?, ?)"
     );
-    $stmt->execute([$name, $email, $interested_in, $message]);
+    $stmt->execute([$name, $email, $interested_in, $course_mode, $message]);
 
     echo json_encode(['success' => true, 'message' => "Thanks! We'll be in touch soon."]);
 } catch (PDOException $e) {

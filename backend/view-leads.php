@@ -104,18 +104,19 @@ $authed = !empty($_SESSION['leads_authed']);
   <table>
     <thead>
       <tr>
-        <th>Date</th><th>Name</th><th>Email</th><th>Interested in</th><th>Message</th>
+        <th>Date</th><th>Name</th><th>Email</th><th>Interested in</th><th>Mode</th><th>Message</th>
       </tr>
     </thead>
     <tbody>
       <?php if (empty($leads)): ?>
-        <tr><td colspan="5">No submissions yet.</td></tr>
+        <tr><td colspan="6">No submissions yet.</td></tr>
       <?php else: foreach ($leads as $lead): ?>
         <tr>
           <td><?= htmlspecialchars($lead['created_at']) ?></td>
           <td><?= htmlspecialchars($lead['name']) ?></td>
           <td><?= htmlspecialchars($lead['email']) ?></td>
           <td><?= htmlspecialchars($lead['interested_in'] ?? '—') ?></td>
+          <td><?= htmlspecialchars($lead['course_mode'] ?? '—') ?></td>
           <td class="msg"><?= htmlspecialchars($lead['message']) ?></td>
         </tr>
       <?php endforeach; endif; ?>
