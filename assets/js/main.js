@@ -247,4 +247,48 @@
       }
     });
   }
+
+  /* ---------------------------------------------------------
+     Hero image slider
+  --------------------------------------------------------- */
+  const heroSlider = document.getElementById("heroSlider");
+  if (heroSlider) {
+    const slides = Array.from(heroSlider.querySelectorAll(".hero-slider__slide"));
+    const dotsWrap = document.getElementById("heroDots");
+    const prevBtn = document.getElementById("heroPrev");
+    const nextBtn = document.getElementById("heroNext");
+    let current = 0;
+    let timer = null;
+
+    slides.forEach((_, i) => {
+      const dot = document.createElement("button");
+      dot.className = "hero-slider__dot" + (i === 0 ? " is-active" : "");
+      dot.setAttribute("aria-label", `Go to slide ${i + 1}`);
+      dot.addEventListener("click", () => { goTo(i); restart(); });
+      dotsWrap.appendChild(dot);
+    });
+    const dots = Array.from(dotsWrap.children);
+
+    function goTo(index) {
+      slides[current].classList.remove("is-active");
+      dots[current].classList.remove("is-active");
+      current = (index + slides.length) % slides.length;
+      slides[current].classList.add("is-active");
+      dots[current].classList.add("is-active");
+    }
+
+    function start() {
+      if (prefersReducedMotion) return;
+      timer = setInterval(() => goTo(current + 1), 5000);
+    }
+    function stop() { if (timer) clearInterval(timer); }
+    function restart() { stop(); start(); }
+
+    prevBtn.addEventListener("click", () => { goTo(current - 1); restart(); });
+    nextBtn.addEventListener("click", () => { goTo(current + 1); restart(); });
+
+    start();
+    heroSlider.addEventListener("mouseenter", stop);
+    heroSlider.addEventListener("mouseleave", start);
+  }
 })();

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FutureXacademy — Digital, AI &amp; Design Studio in Kolkata</title>
 <meta name="description" content="FutureX Academy is a next-generation agency and learning studio in Kolkata, delivering innovative digital solutions, AI/ML development, website strategies, performance marketing, and graphic design.">
-<meta name="theme-color" content="#050816">
+<meta name="theme-color" content="#FFFFFF">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,18 +94,58 @@
         </div>
       </div>
     </div>
+
+    <!-- ============= HERO IMAGE SLIDER ============= -->
+    <div class="hero-slider reveal" id="heroSlider" aria-roledescription="carousel" aria-label="FutureX showcase">
+      <div class="hero-slider__track">
+        <figure class="hero-slider__slide is-active" data-slide="0">
+          <img src="assets/images/hero-ai.jpg" alt="Artificial intelligence development at FutureX Academy" loading="eager">
+          <div class="hero-slider__overlay"></div>
+          <figcaption><span>Artificial Intelligence</span>Smarter systems, built and taught in-house.</figcaption>
+        </figure>
+        <figure class="hero-slider__slide" data-slide="1">
+          <img src="assets/images/hero-ai-class.jpg" alt="AI class in session at FutureX Academy" loading="lazy">
+          <div class="hero-slider__overlay"></div>
+          <figcaption><span>Live AI Classes</span>Cohort-based learning with real mentors.</figcaption>
+        </figure>
+        <figure class="hero-slider__slide" data-slide="2">
+          <img src="assets/images/hero-digital-marketing.jpg" alt="Digital marketing strategy at FutureX Academy" loading="lazy">
+          <div class="hero-slider__overlay"></div>
+          <figcaption><span>Digital Marketing</span>Growth strategy backed by real data.</figcaption>
+        </figure>
+        <figure class="hero-slider__slide" data-slide="3">
+          <img src="assets/images/hero-graphic-design.jpg" alt="Graphic design work at FutureX Academy" loading="lazy">
+          <div class="hero-slider__overlay"></div>
+          <figcaption><span>Graphic Design</span>Visual identity that carries a brand.</figcaption>
+        </figure>
+        <figure class="hero-slider__slide" data-slide="4">
+          <img src="assets/images/hero-programming.jpg" alt="Programming and web development at FutureX Academy" loading="lazy">
+          <div class="hero-slider__overlay"></div>
+          <figcaption><span>Programming</span>Future-proof code for apps and web.</figcaption>
+        </figure>
+      </div>
+
+      <button class="hero-slider__arrow hero-slider__arrow--prev" id="heroPrev" aria-label="Previous slide">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="hero-slider__arrow hero-slider__arrow--next" id="heroNext" aria-label="Next slide">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <div class="hero-slider__dots" id="heroDots"></div>
+    </div>
   </section>
 
   <!-- ===================== SERVICES / DISCIPLINES ===================== -->
   <section class="section" id="services">
     <div class="section__head reveal">
       <p class="eyebrow eyebrow--center"><span class="eyebrow__dot"></span> What we do</p>
-      <h2 class="section__title">Four disciplines. One<br>future-ready studio.</h2>
+      <h2 class="section__title">Four disciplines. One<br>future-ready studio.<span class="accent-bar" style="margin-left:auto;margin-right:auto;"></span></h2>
       <p class="section__sub">Learn, build, and brand with excellence — all under one roof, shaping the future every day.</p>
     </div>
 
     <div class="grid grid--4" id="disciplineGrid">
       <article class="card reveal" style="--d:0">
+        <div class="card__art"><img src="assets/images/card-digital-marketing.jpg" alt="Digital marketing campaign visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c2.5 2.5 4 5.7 4 9.5 0 2-1 4-1 4l-6 0s-1-2-1-4c0-3.8 1.5-7 4-9.5z"/><circle cx="12" cy="10" r="1.6"/><path d="M9 15.5 7 20l2.5-1.2M15 15.5l2 4.5-2.5-1.2"/></svg>
         </div>
@@ -119,6 +159,7 @@
       </article>
 
       <article class="card reveal" style="--d:1">
+        <div class="card__art"><img src="assets/images/card-ai.jpg" alt="Artificial intelligence visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1.5 5.6A3 3 0 0 0 7 17a3 3 0 0 0 5 2.2A3 3 0 0 0 17 17a3 3 0 0 0 2.5-4.4A3 3 0 0 0 18 7a3 3 0 0 0-3-3 2.9 2.9 0 0 0-3 1 2.9 2.9 0 0 0-3-1z"/><path d="M9 9.5h.01M15 9.5h.01M9 14h.01M15 14h.01M12 4v16"/></svg>
         </div>
@@ -133,6 +174,7 @@
       </article>
 
       <article class="card reveal" style="--d:2">
+        <div class="card__art"><img src="assets/images/card-programming.jpg" alt="Programming and code visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4L3 12l5 8M16 4l5 8-5 8"/></svg>
         </div>
@@ -146,6 +188,7 @@
       </article>
 
       <article class="card reveal" style="--d:3">
+        <div class="card__art"><img src="assets/images/card-graphic-design.jpg" alt="Graphic design poster visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.6 7.6"/><circle cx="11" cy="11" r="2"/></svg>
         </div>
@@ -164,7 +207,7 @@
   <section class="section section--split" id="why-us">
     <div class="split__text reveal">
       <p class="eyebrow"><span class="eyebrow__dot"></span> Why FutureX</p>
-      <h2 class="section__title">A studio built to turn ambition into outcomes</h2>
+      <h2 class="section__title">A studio built to turn ambition into outcomes<span class="accent-bar"></span></h2>
       <p class="section__sub">
         We combine agency expertise, production-grade execution and modern
         learning to help brands and learners level up together.
@@ -173,22 +216,22 @@
 
     <div class="split__grid">
       <div class="mini-card reveal" style="--d:0">
-        <div class="mini-card__icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z"/></svg></div>
+        <div class="mini-card__art"><img src="assets/images/hero-ai.jpg" alt="" loading="lazy"></div>
         <h4>Learning by building</h4>
         <p>Practical, real-world learning through live projects and real clients.</p>
       </div>
       <div class="mini-card reveal" style="--d:1">
-        <div class="mini-card__icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></div>
+        <div class="mini-card__art"><img src="assets/images/hero-ai-class.jpg" alt="" loading="lazy"></div>
         <h4>Expert mentors</h4>
         <p>Industry professionals guiding you every step of the way.</p>
       </div>
       <div class="mini-card reveal" style="--d:2">
-        <div class="mini-card__icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+        <div class="mini-card__art"><img src="assets/images/hero-graphic-design.jpg" alt="" loading="lazy"></div>
         <h4>Outcome ready</h4>
         <p>Portfolio, internship, and job-ready skills to launch your career forward.</p>
       </div>
       <div class="mini-card reveal" style="--d:3">
-        <div class="mini-card__icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H4zM4 20h16"/></svg></div>
+        <div class="mini-card__art"><img src="assets/images/hero-digital-marketing.jpg" alt="" loading="lazy"></div>
         <h4>Relevant practical skills</h4>
         <p>Curriculum that matches industry demands and real-world working.</p>
       </div>
