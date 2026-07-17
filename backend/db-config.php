@@ -12,7 +12,7 @@ define('DB_PASS', 'Fdx.2026');    // your database password
 
 // Password to view submissions in view-leads.php.
 // Change this to something only you and your client know.
-define('VIEW_PASSWORD', 'change-this-password');
+define('VIEW_PASSWORD', 'futurex123');
 
 // ---- Email notification settings ----
 // The address that should receive an email every time someone submits
