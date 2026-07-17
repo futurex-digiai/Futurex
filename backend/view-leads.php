@@ -12,7 +12,7 @@ $error = '';
 
 // Handle password submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
-    if ($_POST['password'] === VIEW_PASSWORD) {
+    if (hash_equals(VIEW_PASSWORD, (string) $_POST['password'])) {
         $_SESSION['leads_authed'] = true;
     } else {
         $error = 'Incorrect password.';

@@ -51,6 +51,11 @@
   --shadow-sm: 0 1px 2px rgba(20,21,43,0.04), 0 1px 1px rgba(20,21,43,0.03);
   --shadow-md: 0 8px 24px -8px rgba(20,21,43,0.12);
   --shadow-lg: 0 24px 60px -20px rgba(93,42,220,0.22);
+
+  /* Logo glow: dark halo in light mode (keeps light logo details
+     visible on white), flips to a white halo in dark mode (keeps
+     the logo's dark-navy strokes visible on dark backgrounds). */
+  --logo-glow: rgba(20,21,43,0.4);
 }
 
 /* =========================================================
@@ -59,6 +64,7 @@
    Resets to light on every new visit (no saved preference).
    ========================================================= */
 html[data-theme="dark"]{
+  --logo-glow: rgba(255,255,255,0.55);
   --bg: #14151F;
   --bg-soft: #191B27;
   --ink: #F2F2F7;
@@ -211,6 +217,11 @@ button{ font-family: inherit; }
 .nav__links a:hover{ color: var(--ink); }
 .nav__links a:hover::after{ transform: scaleX(1); }
 .nav__actions{ display:flex; align-items:center; gap:10px; }
+@media (max-width: 420px){
+  .nav__actions{ gap:6px; }
+  .theme-toggle, .social-btn{ width:34px; height:34px; }
+  .nav__actions .btn--primary{ padding-left:14px; padding-right:14px; font-size:14px; }
+}
 .theme-toggle{
   display:grid; place-items:center; width:38px; height:38px; border-radius: 50%;
   border: 1px solid var(--border); background: var(--surface); color: var(--ink);
@@ -218,6 +229,13 @@ button{ font-family: inherit; }
 }
 .theme-toggle:hover{ border-color: var(--border-hi); transform: translateY(-1px); }
 .theme-toggle svg{ display:block; }
+.social-btn{
+  display:grid; place-items:center; width:38px; height:38px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--surface); color: var(--ink);
+  cursor:pointer; flex-shrink:0; transition: border-color .2s ease, background .2s ease, transform .2s ease, color .2s ease;
+}
+.social-btn:hover{ border-color: var(--violet); color: var(--violet); transform: translateY(-1px); }
+.social-btn svg{ display:block; }
 .theme-toggle .icon-moon{ display:none; }
 html[data-theme="dark"] .theme-toggle .icon-sun{ display:none; }
 html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
@@ -264,13 +282,24 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
 }
 .nav__brand .brand-word{ font-size: 22px; }
 .footer__brand .brand-word{ font-size: 22px; }
+.nav__brand-img{
+  height: 46px; width:auto; display:block;
+  filter:
+    drop-shadow(0 0 1px var(--logo-glow))
+    drop-shadow(0 0 4px var(--logo-glow))
+    drop-shadow(0 0 10px var(--logo-glow))
+    drop-shadow(0 0 18px var(--logo-glow));
+  transition: filter .3s ease;
+}
+.footer__brand .nav__brand-img{ height: 42px; margin-bottom: 4px; }
 
 /* =========================================================
    Full-page photo slideshow
    ========================================================= */
 .fullpage-slideshow{
   position: relative; width: 100%; height: 72vh; min-height: 420px; max-height: 640px;
-  overflow: hidden; background: var(--ink);
+  overflow: hidden; background: #0B0C1A; /* fixed dark backdrop -- do not use var(--ink) here, it flips near-white in dark mode */
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
 }
 .fullpage-slideshow__track{ position:absolute; inset:0; }
 .fullpage-slideshow__video{
@@ -280,10 +309,22 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
 .fullpage-slideshow__video.is-hidden{ opacity:0; pointer-events:none; }
 .fullpage-slideshow__slide{
   position:absolute; inset:0; width:100%; height:100%;
-  background-size: cover; background-position: center; opacity:0;
-  transition: opacity 1.2s ease;
+  overflow:hidden; opacity:0; transition: opacity 1.2s ease;
 }
 .fullpage-slideshow__slide.is-active{ opacity:1; }
+/* Blurred, scaled-up copy of the same photo fills the space around the
+   sharp foreground image, replacing flat black letterbox bars with a
+   soft, on-brand backdrop instead. Real <img> tags (not CSS background
+   tricks) for reliable loading and easy debugging via DevTools/Network. */
+.fullpage-slideshow__bg{
+  position:absolute; inset:-40px; width:calc(100% + 80px); height:calc(100% + 80px);
+  object-fit:cover; z-index:0;
+  filter: blur(38px) saturate(1.35) brightness(.5);
+}
+.fullpage-slideshow__fg{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:contain; z-index:1;
+}
 .fullpage-slideshow__overlay{
   position:absolute; inset:0; z-index:1; pointer-events:none;
   background: linear-gradient(180deg, rgba(10,6,30,.45) 0%, rgba(10,6,30,.15) 40%, rgba(10,6,30,.55) 100%);
@@ -506,7 +547,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
 <header class="nav" id="nav">
   <div class="nav__inner">
     <a href="#" class="nav__brand">
-      <span class="brand-word"><span class="brand-word__future">Future</span><span class="brand-word__x">X</span></span>
+      <img src="assets/images/logo/logo-mark.png" alt="FutureX" class="nav__brand-img">
     </a>
 
     <nav class="nav__links" aria-label="Primary">
@@ -521,6 +562,12 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
         <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/></svg>
       </button>
       <a href="#contact" class="btn btn--primary btn--magnetic">Get in touch</a>
+      <a href="https://www.instagram.com/futurex.digiai?igsh=enZ0Y2p0eXBpa2Fp" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="FutureX on Instagram">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://www.facebook.com/share/1ECa342fKd/" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="FutureX on Facebook">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 8.5h2V5h-2.4C12.4 5 11 6.6 11 8.8V11H9v3h2v6h3v-6h2.3l.7-3H14V9c0-.5.3-.5.6-.5z"/></svg>
+      </a>
     </div>
 
     <button class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navMobile">
@@ -746,6 +793,14 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
             <span class="contact__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2z"/></svg></span>
             <span><strong>Call us</strong><br><a href="tel:+918679144434">+91 86791 44434</a></span>
           </li>
+          <li>
+            <span class="contact__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+            <span><strong>Instagram</strong><br><a href="https://www.instagram.com/futurex.digiai?igsh=enZ0Y2p0eXBpa2Fp" target="_blank" rel="noopener noreferrer">@futurex.digiai</a></span>
+          </li>
+          <li>
+            <span class="contact__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 8.5h2V5h-2.4C12.4 5 11 6.6 11 8.8V11H9v3h2v6h3v-6h2.3l.7-3H14V9c0-.5.3-.5.6-.5z"/></svg></span>
+            <span><strong>Facebook</strong><br><a href="https://www.facebook.com/share/1ECa342fKd/" target="_blank" rel="noopener noreferrer">FutureX Digi AI Academy and Labs</a></span>
+          </li>
         </ul>
       </div>
 
@@ -806,7 +861,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
   <div class="footer__inner">
     <div class="footer__brand">
       <a href="#" class="nav__brand">
-          <span class="brand-word"><span class="brand-word__future">Future</span><span class="brand-word__x">X</span></span>
+          <img src="assets/images/logo/logo-mark.png" alt="FutureX" class="nav__brand-img">
       </a>
       <p>A future-focused agency and learning academy for digital, AI, coding &amp; design — empowering creators &amp; brands.</p>
     </div>
@@ -1209,23 +1264,59 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
       });
     }
 
-    async function startPhotoSlideshow() {
+    // Find which numbered photos exist. Runs immediately, in parallel with
+    // the intro video, so the URLs are already known by the time the video
+    // hands off -- no lookup delay at the switch point.
+    async function findSlideUrls() {
       const found = [];
       for (let n = 1; n <= maxSlides; n++) {
         const url = await probeImage(n);
         if (!url) break; // stop at first gap in numbering
         found.push(url);
       }
+      return found;
+    }
+    const urlsReady = findSlideUrls();
+
+    // Loads a slide's actual image data only when it's about to be shown
+    // (plus a one-ahead prefetch), instead of requesting every photo at
+    // once on page load.
+    function loadSlide(slide, url, priority) {
+      if (slide.dataset.loaded) return;
+      slide.dataset.loaded = "1";
+      [slide.bgImg, slide.fgImg].forEach(img => {
+        if (priority) img.fetchPriority = "high";
+        img.src = url;
+        img.onerror = () => console.error("FutureX slideshow: image failed to load:", url);
+      });
+    }
+
+    async function startPhotoSlideshow() {
+      if (startPhotoSlideshow.started) return;
+      startPhotoSlideshow.started = true;
+
+      const found = await urlsReady;
       if (found.length === 0) return; // no photos uploaded yet
 
-      found.forEach((url, i) => {
+      const slideEls = found.map((url, i) => {
         const div = document.createElement("div");
         div.className = "fullpage-slideshow__slide" + (i === 0 ? " is-active" : "");
-        div.style.backgroundImage = `url("${url}")`;
-        track.appendChild(div);
-      });
 
-      const slideEls = Array.from(track.children);
+        const bg = document.createElement("img");
+        bg.className = "fullpage-slideshow__bg";
+        bg.alt = ""; bg.setAttribute("aria-hidden", "true");
+        const fg = document.createElement("img");
+        fg.className = "fullpage-slideshow__fg";
+        fg.alt = "FutureX Academy showcase photo " + (i + 1);
+
+        div.appendChild(bg);
+        div.appendChild(fg);
+        div.bgImg = bg; div.fgImg = fg;
+        track.appendChild(div);
+        return div;
+      });
+      loadSlide(slideEls[0], found[0], true);
+      if (found.length > 1) loadSlide(slideEls[1], found[1]); // prefetch next
 
       if (found.length > 1) {
         found.forEach((_, i) => {
@@ -1244,6 +1335,9 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
           current = (index + slideEls.length) % slideEls.length;
           slideEls[current].classList.add("is-active");
           dotEls[current].classList.add("is-active");
+          loadSlide(slideEls[current], found[current]);
+          const next = (current + 1) % slideEls.length;
+          loadSlide(slideEls[next], found[next]); // stay one slide ahead
         }
 
         if (!prefersReducedMotion) {
@@ -1253,9 +1347,18 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
     }
 
     function handOffToPhotos() {
-      if (!introVideo) { startPhotoSlideshow(); return; }
-      introVideo.classList.add("is-hidden");
-      setTimeout(() => introVideo.remove(), 1000); // after fade-out transition
+      if (handOffToPhotos.done) return; // guard: never run this twice
+      handOffToPhotos.done = true;
+
+      if (introVideo) {
+        introVideo.classList.add("is-hidden");
+        introVideo.pause();
+        setTimeout(() => {
+          introVideo.removeAttribute("src"); // fully unload -- can never play again
+          introVideo.load();
+          introVideo.remove();
+        }, 1000); // after fade-out transition
+      }
       startPhotoSlideshow();
     }
 
@@ -1264,6 +1367,10 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
       introVideo.addEventListener("ended", handOffToPhotos, { once: true });
       // If the video file is missing/fails to load, skip straight to photos.
       introVideo.addEventListener("error", handOffToPhotos, { once: true });
+      // Safety net: if the video ever hangs/stalls and never fires ended
+      // or error (e.g. a codec or local-file quirk), force the handoff
+      // after 15s so the page is never stuck showing just the video.
+      setTimeout(handOffToPhotos, 15000);
       // Respect reduced-motion preference -- skip the video and go straight to photos.
       if (prefersReducedMotion) {
         handOffToPhotos();

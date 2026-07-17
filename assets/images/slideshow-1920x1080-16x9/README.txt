@@ -23,5 +23,9 @@ RECOMMENDED PHOTO SIZE:
 - Ratio: 16:9 (widescreen / landscape), e.g. 1920x1080 pixels
 - File size: keep each photo under ~500KB for fast loading
   (use any online image compressor before uploading)
-- These photos fill the entire screen width and height, so avoid
-  photos with important details right at the very edges.
+- The whole photo is always shown in full -- nothing gets cropped,
+  even on very wide or very narrow screens. If a photo's ratio
+  doesn't exactly match the screen, you'll see a thin dark bar on
+  the sides or top/bottom rather than losing part of the image.
+  This matters most for photos with text or logos baked into them
+  (like posters), since those can't afford to have edges cut off.

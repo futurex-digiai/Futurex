@@ -1,0 +1,14 @@
+# Never commit real database credentials.
+# Keep db-config.php in the repo as a PLACEHOLDER template only.
+# On the live server, edit it directly there with real values --
+# don't paste real credentials back into this git repo.
+
+# If you'd rather git ignore it completely once it has real values,
+# rename the tracked template to db-config.example.php and uncomment
+# the line below:
+# backend/db-config.php
+
+.DS_Store
+Thumbs.db
+*.log
+node_modules/

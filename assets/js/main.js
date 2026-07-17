@@ -107,7 +107,10 @@
     const ctx = canvas.getContext("2d");
     let w, h, dpr, t = 0;
     let particles = [];
+    let dust = [];
     let sparks = [];
+    let mx = null, my = null; // mouse position for gentle parallax
+    let parallaxX = 0, parallaxY = 0;
     const COLORS = ["#6D3BF5", "#2563EB", "#8B5CF6", "#3B82F6"];
 
     const resize = () => {
@@ -120,33 +123,70 @@
     };
 
     const initParticles = () => {
-      const count = w < 640 ? 22 : 42;
+      // Scaled to the now full-viewport-height hero so the network
+      // reads as an ambient scene rather than a cramped cluster.
+      const area = w * h;
+      const count = Math.max(28, Math.min(90, Math.round(area / 22000)));
       particles = Array.from({ length: count }, (_, i) => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.32,
-        vy: (Math.random() - 0.5) * 0.32,
+        vx: (Math.random() - 0.5) * 0.28,
+        vy: (Math.random() - 0.5) * 0.28,
         r: 1.6 + Math.random() * 2.2,
+        depth: 0.5 + Math.random() * 0.6, // parallax + size depth cue
         pulse: Math.random() * Math.PI * 2,
         color: COLORS[i % COLORS.length]
+      }));
+
+      // Faint distant "dust" layer -- small, slow, twinkling points that
+      // fill out the full-page canvas without competing with the nodes.
+      const dustCount = Math.max(40, Math.min(140, Math.round(area / 14000)));
+      dust = Array.from({ length: dustCount }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: 0.6 + Math.random() * 1.1,
+        twinkle: Math.random() * Math.PI * 2,
+        speed: 0.15 + Math.random() * 0.3,
+        vy: 0.05 + Math.random() * 0.08
       }));
     };
 
     // Occasional bright "spark" that travels along a connection —
     // the small unexpected flash is the deliberate dopamine touch.
     const maybeSpawnSpark = () => {
-      if (sparks.length > 2 || Math.random() > 0.012) return;
+      if (sparks.length > 3 || Math.random() > 0.014) return;
       const a = particles[Math.floor(Math.random() * particles.length)];
       const b = particles[Math.floor(Math.random() * particles.length)];
       const dist = Math.hypot(a.x - b.x, a.y - b.y);
-      if (dist > 0 && dist < 170) sparks.push({ a, b, p: 0 });
+      if (dist > 0 && dist < 180) sparks.push({ a, b, p: 0 });
     };
 
     let isRunning = false;
     const step = () => {
       if (!isRunning) return;
       t += 0.02;
+
+      // Parallax gently eases toward the mouse position (or a slow
+      // autonomous drift on touch devices with no mouse).
+      const targetX = mx !== null ? (mx / w - 0.5) * 18 : Math.sin(t * 0.15) * 6;
+      const targetY = my !== null ? (my / h - 0.5) * 12 : Math.cos(t * 0.12) * 4;
+      parallaxX += (targetX - parallaxX) * 0.03;
+      parallaxY += (targetY - parallaxY) * 0.03;
+
       ctx.clearRect(0, 0, w, h);
+
+      // distant twinkling dust, drifting slowly upward
+      dust.forEach(d => {
+        d.twinkle += 0.02 * d.speed;
+        d.y -= d.vy;
+        if (d.y < -4) { d.y = h + 4; d.x = Math.random() * w; }
+        const a = 0.15 + Math.sin(d.twinkle) * 0.15;
+        ctx.beginPath();
+        ctx.arc(d.x + parallaxX * 0.3, d.y + parallaxY * 0.3, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(180,170,255,${Math.max(0, a)})`;
+        ctx.fill();
+      });
+
       particles.forEach(p => {
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0 || p.x > w) p.vx *= -1;
@@ -164,8 +204,8 @@
             ctx.strokeStyle = `rgba(109,59,245,${(1 - dist / maxDist) * 0.22})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
+            ctx.moveTo(a.x + parallaxX * a.depth, a.y + parallaxY * a.depth);
+            ctx.lineTo(b.x + parallaxX * b.depth, b.y + parallaxY * b.depth);
             ctx.stroke();
           }
         }
@@ -175,16 +215,17 @@
       particles.forEach(p => {
         p.pulse += 0.045;
         const pulseR = p.r + Math.sin(p.pulse) * 0.8;
+        const px = p.x + parallaxX * p.depth, py = p.y + parallaxY * p.depth;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, pulseR * 3.2, 0, Math.PI * 2);
-        const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, pulseR * 3.2);
+        ctx.arc(px, py, pulseR * 3.2, 0, Math.PI * 2);
+        const glow = ctx.createRadialGradient(px, py, 0, px, py, pulseR * 3.2);
         glow.addColorStop(0, p.color + "33");
         glow.addColorStop(1, p.color + "00");
         ctx.fillStyle = glow;
         ctx.fill();
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, pulseR, 0, Math.PI * 2);
+        ctx.arc(px, py, pulseR, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
         ctx.globalAlpha = 0.85;
         ctx.fill();
@@ -196,8 +237,8 @@
       sparks = sparks.filter(s => s.p < 1);
       sparks.forEach(s => {
         s.p += 0.02;
-        const x = s.a.x + (s.b.x - s.a.x) * s.p;
-        const y = s.a.y + (s.b.y - s.a.y) * s.p;
+        const x = s.a.x + (s.b.x - s.a.x) * s.p + parallaxX * s.a.depth;
+        const y = s.a.y + (s.b.y - s.a.y) * s.p + parallaxY * s.a.depth;
         ctx.beginPath();
         ctx.arc(x, y, 2.4, 0, Math.PI * 2);
         const g = ctx.createRadialGradient(x, y, 0, x, y, 8);
@@ -222,6 +263,14 @@
 
     resize();
     initParticles();
+
+    // Subtle parallax: nodes drift toward the cursor within the hero.
+    canvas.addEventListener("pointermove", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mx = e.clientX - rect.left;
+      my = e.clientY - rect.top;
+    }, { passive: true });
+    canvas.addEventListener("pointerleave", () => { mx = null; my = null; }, { passive: true });
 
     // Only animate while the hero canvas is actually on screen
     const canvasIo = new IntersectionObserver((entries) => {
@@ -281,6 +330,16 @@
         return;
       }
 
+      // Honeypot: real visitors never see/fill this field, only bots do.
+      // Pretend to succeed so bots don't learn to skip it.
+      const honeypot = form.querySelector("[name=website]");
+      if (honeypot && honeypot.value.trim() !== "") {
+        status.textContent = "Thanks! We'll be in touch soon.";
+        status.classList.add("is-success");
+        form.reset();
+        return;
+      }
+
       submitBtn.classList.add("is-loading");
       submitBtn.disabled = true;
       status.textContent = "";
@@ -291,7 +350,8 @@
           email: form.querySelector("[name=email]").value.trim(),
           interested_in: form.querySelector("[name=interest]").value.trim(),
           course_mode: form.querySelector("[name=mode]").value.trim(),
-          message: form.querySelector("[name=message]").value.trim()
+          message: form.querySelector("[name=message]").value.trim(),
+          website: honeypot ? honeypot.value : ""
         };
 
         const res = await fetch("/backend/contact-handler.php", {
@@ -352,6 +412,8 @@
     const track = document.getElementById("slideshowTrack");
     const dotsWrap = document.getElementById("slideshowDots");
     const introVideo = document.getElementById("slideshowIntroVideo");
+    const introVideoBg = document.getElementById("slideshowIntroVideoBg");
+    const videoWrap = document.getElementById("slideshowVideoWrap");
     const folder = "assets/images/slideshow-1920x1080-16x9/";
     const extensions = ["jpg", "jpeg", "png", "webp"];
     const maxSlides = 20;
@@ -372,23 +434,59 @@
       });
     }
 
-    async function startPhotoSlideshow() {
+    // Find which numbered photos exist. Runs immediately, in parallel with
+    // the intro video, so the URLs are already known by the time the video
+    // hands off -- no lookup delay at the switch point.
+    async function findSlideUrls() {
       const found = [];
       for (let n = 1; n <= maxSlides; n++) {
         const url = await probeImage(n);
         if (!url) break; // stop at first gap in numbering
         found.push(url);
       }
+      return found;
+    }
+    const urlsReady = findSlideUrls();
+
+    // Loads a slide's actual image data only when it's about to be shown
+    // (plus a one-ahead prefetch), instead of requesting every photo at
+    // once on page load.
+    function loadSlide(slide, url, priority) {
+      if (slide.dataset.loaded) return;
+      slide.dataset.loaded = "1";
+      [slide.bgImg, slide.fgImg].forEach(img => {
+        if (priority) img.fetchPriority = "high";
+        img.src = url;
+        img.onerror = () => console.error("FutureX slideshow: image failed to load:", url);
+      });
+    }
+
+    async function startPhotoSlideshow() {
+      if (startPhotoSlideshow.started) return;
+      startPhotoSlideshow.started = true;
+
+      const found = await urlsReady;
       if (found.length === 0) return; // no photos uploaded yet
 
-      found.forEach((url, i) => {
+      const slideEls = found.map((url, i) => {
         const div = document.createElement("div");
         div.className = "fullpage-slideshow__slide" + (i === 0 ? " is-active" : "");
-        div.style.backgroundImage = `url("${url}")`;
-        track.appendChild(div);
-      });
 
-      const slideEls = Array.from(track.children);
+        const bg = document.createElement("img");
+        bg.className = "fullpage-slideshow__bg";
+        bg.alt = ""; bg.setAttribute("aria-hidden", "true");
+        const fg = document.createElement("img");
+        fg.className = "fullpage-slideshow__fg";
+        fg.alt = "FutureX Academy showcase photo " + (i + 1);
+
+        div.appendChild(bg);
+        div.appendChild(fg);
+        div.bgImg = bg; div.fgImg = fg;
+        track.appendChild(div);
+        return div;
+      });
+      loadSlide(slideEls[0], found[0], true);
+      if (found.length > 1) loadSlide(slideEls[1], found[1]); // prefetch next
 
       if (found.length > 1) {
         found.forEach((_, i) => {
@@ -407,6 +505,9 @@
           current = (index + slideEls.length) % slideEls.length;
           slideEls[current].classList.add("is-active");
           dotEls[current].classList.add("is-active");
+          loadSlide(slideEls[current], found[current]);
+          const next = (current + 1) % slideEls.length;
+          loadSlide(slideEls[next], found[next]); // stay one slide ahead
         }
 
         if (!prefersReducedMotion) {
@@ -416,9 +517,21 @@
     }
 
     function handOffToPhotos() {
-      if (!introVideo) { startPhotoSlideshow(); return; }
-      introVideo.classList.add("is-hidden");
-      setTimeout(() => introVideo.remove(), 1000); // after fade-out transition
+      if (handOffToPhotos.done) return; // guard: never run this twice
+      handOffToPhotos.done = true;
+
+      if (videoWrap) {
+        videoWrap.classList.add("is-hidden");
+        [introVideo, introVideoBg].forEach(v => v && v.pause());
+        setTimeout(() => {
+          [introVideo, introVideoBg].forEach(v => {
+            if (!v) return;
+            v.removeAttribute("src"); // fully unload -- can never play again
+            v.load();
+          });
+          videoWrap.remove();
+        }, 1000); // after fade-out transition
+      }
       startPhotoSlideshow();
     }
 
@@ -427,6 +540,10 @@
       introVideo.addEventListener("ended", handOffToPhotos, { once: true });
       // If the video file is missing/fails to load, skip straight to photos.
       introVideo.addEventListener("error", handOffToPhotos, { once: true });
+      // Safety net: if the video ever hangs/stalls and never fires ended
+      // or error (e.g. a codec or local-file quirk), force the handoff
+      // after 15s so the page is never stuck showing just the video.
+      setTimeout(handOffToPhotos, 15000);
       // Respect reduced-motion preference -- skip the video and go straight to photos.
       if (prefersReducedMotion) {
         handOffToPhotos();

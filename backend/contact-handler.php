@@ -17,6 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Read the JSON body sent by main.js
 $data = json_decode(file_get_contents('php://input'), true);
 
+// Honeypot -- real visitors never fill this hidden field, bots do.
+// Pretend success so bots don't learn to leave it empty.
+if (trim($data['website'] ?? '') !== '') {
+    echo json_encode(['success' => true, 'message' => "Thanks! We'll be in touch soon."]);
+    exit;
+}
+
 $name          = trim($data['name'] ?? '');
 $email         = trim($data['email'] ?? '');
 $interested_in = trim($data['interested_in'] ?? '');
