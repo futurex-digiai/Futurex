@@ -50,22 +50,96 @@ function send_lead_notification($name, $email, $phone, $interested_in, $course_m
     $body .= "Course mode: $course_mode\n";
     $body .= "Message:\n$message\n";
 
-    // Build the "From" address automatically from whatever domain this
-    // script is running on (e.g. futurex.com -> no-reply@futurex.com).
-    // No mailbox needs to exist for this -- it's just the sender label.
-    $domain    = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    $domain    = preg_replace('/^www\./i', '', $domain); // strip leading www.
-    $mail_from = 'no-reply@' . $domain;
+    smtp_send(NOTIFY_EMAIL, $subject, $body, $email);
+}
+
+// Minimal pure-PHP SMTP client -- no library/composer needed.
+// Logs in to Gmail with SMTP_USER + SMTP_PASS (a 16-char Gmail "App
+// Password", not the normal Gmail login password) and sends the email
+// through Gmail itself, which is far more reliable than the server's
+// local mail() function on shared hosting like Hostinger.
+function smtp_send($to, $subject, $body, $reply_to) {
+    $host = SMTP_HOST;
+    $port = SMTP_PORT;
+    $user = SMTP_USER;
+    $pass = str_replace(' ', '', SMTP_PASS); // app passwords are usually shown with spaces
+
+    $read = function ($socket) {
+        $data = '';
+        while ($line = fgets($socket, 515)) {
+            $data .= $line;
+            // Multi-line SMTP responses have a "-" after the code until the last line.
+            if (isset($line[3]) && $line[3] === ' ') break;
+        }
+        return $data;
+    };
+
+    $socket = @stream_socket_client("tcp://$host:$port", $errno, $errstr, 15);
+    if (!$socket) {
+        error_log("SMTP connect failed: $errstr ($errno)");
+        return false;
+    }
+
+    $read($socket); // greeting
+
+    fwrite($socket, "EHLO " . ($_SERVER['HTTP_HOST'] ?? 'localhost') . "\r\n");
+    $read($socket);
+
+    fwrite($socket, "STARTTLS\r\n");
+    $read($socket);
+
+    if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+        error_log("SMTP STARTTLS failed");
+        fclose($socket);
+        return false;
+    }
+
+    fwrite($socket, "EHLO " . ($_SERVER['HTTP_HOST'] ?? 'localhost') . "\r\n");
+    $read($socket);
+
+    fwrite($socket, "AUTH LOGIN\r\n");
+    $read($socket);
+    fwrite($socket, base64_encode($user) . "\r\n");
+    $read($socket);
+    fwrite($socket, base64_encode($pass) . "\r\n");
+    $auth_resp = $read($socket);
+    if (strpos($auth_resp, '235') !== 0) {
+        error_log("SMTP auth failed: $auth_resp");
+        fclose($socket);
+        return false;
+    }
+
+    fwrite($socket, "MAIL FROM:<$user>\r\n");
+    $read($socket);
+    fwrite($socket, "RCPT TO:<$to>\r\n");
+    $read($socket);
+    fwrite($socket, "DATA\r\n");
+    $read($socket);
 
     $headers   = [];
-    $headers[] = "From: " . MAIL_FROM_NAME . " <" . $mail_from . ">";
+    $headers[] = "From: " . MAIL_FROM_NAME . " <$user>";
     // Reply-To is the visitor's own email, so clicking "Reply" in the
     // client's inbox goes straight to the person who filled the form.
-    $headers[] = "Reply-To: $email";
+    $headers[] = "Reply-To: $reply_to";
+    $headers[] = "Subject: $subject";
     $headers[] = "MIME-Version: 1.0";
     $headers[] = "Content-Type: text/plain; charset=UTF-8";
 
-    @mail(NOTIFY_EMAIL, $subject, $body, implode("\r\n", $headers));
+    // Any line starting with a lone "." must be escaped per SMTP rules.
+    $escaped_body = preg_replace('/^\./m', '..', $body);
+
+    $message = implode("\r\n", $headers) . "\r\n\r\n" . $escaped_body . "\r\n.\r\n";
+    fwrite($socket, $message);
+    $send_resp = $read($socket);
+
+    fwrite($socket, "QUIT\r\n");
+    fclose($socket);
+
+    if (strpos($send_resp, '250') !== 0) {
+        error_log("SMTP send failed: $send_resp");
+        return false;
+    }
+    return true;
 }
 
 try {
