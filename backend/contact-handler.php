@@ -16,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Read the JSON body sent by main.js
 $data = json_decode(file_get_contents('php://input'), true);
-error_log('FORM DATA: ' . print_r($data, true)); // TEMP: remove once the 400 is confirmed fixed
 
 // Honeypot -- real visitors never fill this hidden field, bots do.
 // Pretend success so bots don't learn to leave it empty.
