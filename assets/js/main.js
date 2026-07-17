@@ -48,6 +48,96 @@
   }
 
   /* ---------------------------------------------------------
+     Courses carousel (manual swipe / drag / arrow widget)
+  --------------------------------------------------------- */
+  const carouselTrack = document.getElementById("disciplineGrid");
+  const carouselPrev = document.getElementById("disciplinePrev");
+  const carouselNext = document.getElementById("disciplineNext");
+  const carouselDots = document.getElementById("disciplineDots");
+
+  if (carouselTrack && carouselPrev && carouselNext) {
+    const slides = Array.from(carouselTrack.children);
+
+    const getStep = () => {
+      const first = slides[0];
+      if (!first) return carouselTrack.clientWidth;
+      const style = window.getComputedStyle(carouselTrack);
+      const gap = parseFloat(style.columnGap || style.gap || "20") || 20;
+      return first.getBoundingClientRect().width + gap;
+    };
+
+    const perView = () => Math.max(1, Math.round(carouselTrack.clientWidth / getStep()));
+
+    // Build dot indicators (one per "page" of visible cards)
+    const buildDots = () => {
+      carouselDots.innerHTML = "";
+      const pages = Math.max(1, slides.length - perView() + 1);
+      for (let i = 0; i < pages; i++) {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.setAttribute("aria-label", `Go to course ${i + 1}`);
+        dot.addEventListener("click", () => {
+          carouselTrack.scrollTo({ left: i * getStep(), behavior: "smooth" });
+        });
+        carouselDots.appendChild(dot);
+      }
+    };
+
+    const updateUI = () => {
+      const max = carouselTrack.scrollWidth - carouselTrack.clientWidth - 2;
+      carouselPrev.disabled = carouselTrack.scrollLeft <= 2;
+      carouselNext.disabled = carouselTrack.scrollLeft >= max;
+
+      const dots = Array.from(carouselDots.children);
+      if (dots.length) {
+        const index = Math.round(carouselTrack.scrollLeft / getStep());
+        dots.forEach((d, i) => d.classList.toggle("is-active", i === Math.min(index, dots.length - 1)));
+      }
+    };
+
+    carouselPrev.addEventListener("click", () => {
+      carouselTrack.scrollBy({ left: -getStep(), behavior: "smooth" });
+    });
+    carouselNext.addEventListener("click", () => {
+      carouselTrack.scrollBy({ left: getStep(), behavior: "smooth" });
+    });
+
+    let scrollTicking = false;
+    carouselTrack.addEventListener("scroll", () => {
+      if (!scrollTicking) {
+        window.requestAnimationFrame(() => { updateUI(); scrollTicking = false; });
+        scrollTicking = true;
+      }
+    }, { passive: true });
+
+    // Drag-to-swipe with mouse (touch already works natively via overflow-x)
+    let isDown = false, startX = 0, startScroll = 0;
+    carouselTrack.addEventListener("pointerdown", (e) => {
+      isDown = true;
+      startX = e.clientX;
+      startScroll = carouselTrack.scrollLeft;
+      carouselTrack.classList.add("is-dragging");
+    });
+    window.addEventListener("pointermove", (e) => {
+      if (!isDown) return;
+      carouselTrack.scrollLeft = startScroll - (e.clientX - startX);
+    });
+    window.addEventListener("pointerup", () => {
+      isDown = false;
+      carouselTrack.classList.remove("is-dragging");
+    });
+
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { buildDots(); updateUI(); }, 150);
+    });
+
+    buildDots();
+    updateUI();
+  }
+
+  /* ---------------------------------------------------------
      Counter animation for hero stats
   --------------------------------------------------------- */
   const counters = document.querySelectorAll(".stat__num");
@@ -348,7 +438,6 @@
         const payload = {
           name: form.querySelector("[name=name]").value.trim(),
           email: form.querySelector("[name=email]").value.trim(),
-          phone: form.querySelector("[name=phone]") ? form.querySelector("[name=phone]").value.trim() : "",
           interested_in: form.querySelector("[name=interest]").value.trim(),
           course_mode: form.querySelector("[name=mode]").value.trim(),
           message: form.querySelector("[name=message]").value.trim(),

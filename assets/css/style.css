@@ -146,6 +146,51 @@ button{ font-family: inherit; }
 .grid--4{ grid-template-columns: repeat(4, 1fr); }
 .grid--6{ grid-template-columns: repeat(3, 1fr); }
 
+/* =========================================================
+   Swipeable course carousel widget
+   ========================================================= */
+.carousel{ position:relative; }
+.carousel__track{
+  display:flex; gap:20px; overflow-x:auto; scroll-snap-type:x mandatory;
+  scroll-behavior:smooth; padding:6px 4px 18px; margin:0 -4px;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.carousel__track::-webkit-scrollbar{ display:none; }
+.carousel__track{ cursor:grab; }
+.carousel__track.is-dragging{ cursor:grabbing; scroll-snap-type:none; user-select:none; }
+.carousel__track > .card{
+  flex:0 0 calc((100% - 40px) / 3); scroll-snap-align:start; min-width:0;
+}
+.carousel__arrow{
+  position:absolute; top:38%; transform:translateY(-50%); z-index:5;
+  width:44px; height:44px; border-radius:50%; display:grid; place-items:center;
+  background:var(--surface); border:1px solid var(--border); color:var(--ink);
+  box-shadow:var(--shadow-md); cursor:pointer; transition:transform .2s var(--ease), border-color .2s ease, opacity .2s ease;
+}
+.carousel__arrow:hover{ transform:translateY(-50%) scale(1.08); border-color:var(--border-hi); }
+.carousel__arrow--prev{ left:-22px; }
+.carousel__arrow--next{ right:-22px; }
+.carousel__arrow[disabled]{ opacity:.35; cursor:default; pointer-events:none; }
+.carousel__dots{ display:flex; justify-content:center; gap:8px; margin-top:4px; }
+.carousel__dots button{
+  width:8px; height:8px; border-radius:50%; border:none; padding:0;
+  background:var(--border-hi); cursor:pointer; transition:transform .2s ease, background .2s ease;
+}
+.carousel__dots button.is-active{ background:var(--violet); transform:scale(1.3); }
+
+.card__art--icon{ display:grid; place-items:center; color:var(--ic); background:var(--tint); }
+
+@media (max-width: 980px){
+  .carousel__track > .card{ flex:0 0 calc((100% - 20px) / 2); }
+}
+@media (max-width: 560px){
+  .carousel__track > .card{ flex:0 0 88%; }
+  .carousel__arrow{ width:38px; height:38px; }
+  .carousel__arrow--prev{ left:-10px; }
+  .carousel__arrow--next{ right:-10px; }
+}
+
 .accent-bar{
   display:block; width:48px; height:3px; margin-top:14px; border-radius:99px;
   background: var(--grad-brand);
@@ -464,20 +509,8 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
 .card__list li{ font-family: var(--font-ui); font-size: 13.5px; color: var(--text-mute); padding-left: 16px; position:relative; }
 .card__list li::before{ content:""; position:absolute; left:0; top:8px; width:5px; height:5px; border-radius:50%; background: var(--violet); }
 
-@media (max-width: 980px){ .grid--4{ grid-template-columns: repeat(2,1fr); } }
-@media (max-width: 560px){ .grid--4{ grid-template-columns: 1fr; } }
-
-/* Course carousel: manual swipe on touch, no auto-play */
-.course-carousel{
-  display:flex; gap:20px; overflow-x:auto; scroll-snap-type:x mandatory;
-  padding: 6px 6px 20px; margin: 0 -6px; -webkit-overflow-scrolling:touch; scrollbar-width:thin;
-}
-.course-carousel .card{
-  flex: 0 0 280px; scroll-snap-align:start;
-}
-@media (max-width: 560px){
-  .course-carousel .card{ flex-basis: 82vw; }
-}
+@media (max-width: 980px){ .grid--4{ grid-template-columns: repeat(2,1fr); } .grid--6{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 560px){ .grid--4{ grid-template-columns: 1fr; } .grid--6{ grid-template-columns: 1fr; } }
 
 /* =========================================================
    Split / mini cards (Why FutureX)
