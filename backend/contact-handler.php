@@ -32,7 +32,7 @@ $course_mode   = trim($data['course_mode'] ?? '');
 $message       = trim($data['message'] ?? '');
 
 // Basic server-side validation -- never trust the browser alone
-if ($name === '' || $email === '' || $message === '' ||
+if ($name === '' || $email === '' || $phone === '' || $message === '' ||
     !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Invalid form data']);

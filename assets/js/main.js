@@ -390,7 +390,9 @@
     const validators = {
       name: (v) => v.trim().length > 1,
       email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+      phone: (v) => /^[+()0-9\s-]{7,20}$/.test(v.trim()),
       interest: (v) => v.trim().length > 0,
+
       mode: (v) => v.trim().length > 0,
       message: (v) => v.trim().length > 4
     };
@@ -438,6 +440,7 @@
         const payload = {
           name: form.querySelector("[name=name]").value.trim(),
           email: form.querySelector("[name=email]").value.trim(),
+          phone: form.querySelector("[name=phone]").value.trim(),
           interested_in: form.querySelector("[name=interest]").value.trim(),
           course_mode: form.querySelector("[name=mode]").value.trim(),
           message: form.querySelector("[name=message]").value.trim(),

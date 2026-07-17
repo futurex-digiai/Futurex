@@ -880,6 +880,11 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
           <span class="field__err">Enter a valid email</span>
         </div>
         <div class="field">
+          <label for="f-phone">Phone number</label>
+          <input type="tel" id="f-phone" name="phone" placeholder="98765 43210" required autocomplete="tel" inputmode="tel">
+          <span class="field__err">Enter a valid phone number</span>
+        </div>
+        <div class="field">
           <label for="f-interest">Interested in</label>
           <select id="f-interest" name="interest" required>
             <option value="" disabled selected>Select a course</option>
@@ -1296,6 +1301,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
     const validators = {
       name: (v) => v.trim().length > 1,
       email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+      phone: (v) => /^[+()0-9\s-]{7,20}$/.test(v.trim()),
       interest: (v) => v.trim().length > 0,
       mode: (v) => v.trim().length > 0,
       message: (v) => v.trim().length > 4
@@ -1334,6 +1340,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon{ display:block; }
         const payload = {
           name: form.querySelector("[name=name]").value.trim(),
           email: form.querySelector("[name=email]").value.trim(),
+          phone: form.querySelector("[name=phone]").value.trim(),
           interested_in: form.querySelector("[name=interest]").value.trim(),
           course_mode: form.querySelector("[name=mode]").value.trim(),
           message: form.querySelector("[name=message]").value.trim()
