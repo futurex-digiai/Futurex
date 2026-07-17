@@ -13,3 +13,13 @@ define('DB_PASS', 'YOUR_DB_PASSWORD');    // your database password
 // Password to view submissions in view-leads.php.
 // Change this to something only you and your client know.
 define('VIEW_PASSWORD', 'change-this-password');
+
+// ---- Email notification settings ----
+// The address that should receive an email every time someone submits
+// the contact form (your client's inbox).
+define('NOTIFY_EMAIL', 'join.futurex@gmail.com');
+
+// Nothing else to fill in here -- contact-handler.php builds the
+// "From" address automatically from whatever domain the site is
+// running on, so no mailbox needs to be created for it.
+define('MAIL_FROM_NAME', 'FutureX Website');

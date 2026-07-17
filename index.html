@@ -43,6 +43,9 @@
       <a href="https://www.facebook.com/share/1ECa342fKd/" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="FutureX on Facebook">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 8.5h2V5h-2.4C12.4 5 11 6.6 11 8.8V11H9v3h2v6h3v-6h2.3l.7-3H14V9c0-.5.3-.5.6-.5z"/></svg>
       </a>
+      <a href="https://wa.me/918679144434" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="FutureX on WhatsApp">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 20.5l1.4-4.1a8 8 0 1 1 3 3l-4.4 1.1z"/><path d="M8.6 9.4c.2-.5.5-.5.8-.5h.4c.2 0 .4 0 .6.4l.6 1.4c.1.3.1.5-.1.7l-.4.4c-.1.2-.1.4 0 .6.4.6 1.4 1.6 2 2 .2.1.4.1.6 0l.4-.4c.2-.2.4-.2.7-.1l1.4.6c.3.2.4.4.4.6v.5c0 .3 0 .5-.5.7-1.5.7-3.2-.5-4.6-1.9-1.4-1.4-2.6-3-1.9-4.6z" fill="currentColor" stroke="none"/></svg>
+      </a>
     </div>
 
     <button class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navMobile">
@@ -117,7 +120,7 @@
       <p class="section__sub">Learn, build, and brand with excellence — all under one roof, shaping the future every day.</p>
     </div>
 
-    <div class="grid grid--6" id="disciplineGrid">
+    <div class="course-carousel" id="disciplineGrid">
       <article class="card reveal" style="--d:0">
         <div class="card__art"><img src="assets/images/site-photos/card-digital-marketing-16x10.jpg" alt="Digital marketing campaign visual" loading="lazy"></div>
         <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
@@ -204,6 +207,20 @@
           <li>PDF &amp; Office Automation</li>
         </ul>
       </article>
+
+      <article class="card reveal" style="--d:6">
+        <div class="card__art"><img src="assets/images/site-photos/card-programming-16x10.jpg" alt="AutoCAD drafting and design visual" loading="lazy"></div>
+        <div class="card__icon" style="--tint:#7B5CFF1f;--ic:#B6A6FF">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 5-6 4 4"/></svg>
+        </div>
+        <h3>AutoCAD</h3>
+        <p>Precision drafting and design skills for engineering &amp; architecture careers.</p>
+        <ul class="card__list">
+          <li>2D Drafting</li>
+          <li>3D Modeling</li>
+          <li>Technical Drawing Standards</li>
+        </ul>
+      </article>
     </div>
   </section>
 
@@ -272,6 +289,10 @@
             <span><strong>Call us</strong><br><a href="tel:+918679144434">+91 86791 44434</a></span>
           </li>
           <li>
+            <span class="contact__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 20.5l1.4-4.1a8 8 0 1 1 3 3l-4.4 1.1z"/><path d="M8.6 9.4c.2-.5.5-.5.8-.5h.4c.2 0 .4 0 .6.4l.6 1.4c.1.3.1.5-.1.7l-.4.4c-.1.2-.1.4 0 .6.4.6 1.4 1.6 2 2 .2.1.4.1.6 0l.4-.4c.2-.2.4-.2.7-.1l1.4.6c.3.2.4.4.4.6v.5c0 .3 0 .5-.5.7-1.5.7-3.2-.5-4.6-1.9-1.4-1.4-2.6-3-1.9-4.6z" fill="currentColor" stroke="none"/></svg></span>
+            <span><strong>WhatsApp</strong><br><a href="https://wa.me/918679144434" target="_blank" rel="noopener noreferrer">+91 86791 44434</a></span>
+          </li>
+          <li>
             <span class="contact__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg></span>
             <span><strong>Instagram</strong><br><a href="https://www.instagram.com/futurex.digiai?igsh=enZ0Y2p0eXBpa2Fp" target="_blank" rel="noopener noreferrer">@futurex.digiai</a></span>
           </li>
@@ -296,6 +317,10 @@
           <label for="f-email">Email</label>
           <input type="email" id="f-email" name="email" placeholder="you@company.com" required autocomplete="email">
           <span class="field__err">Enter a valid email</span>
+        </div>
+        <div class="field">
+          <label for="f-phone">Phone number (optional)</label>
+          <input type="tel" id="f-phone" name="phone" placeholder="Enter phone number" autocomplete="tel">
         </div>
         <div class="field">
           <label for="f-interest">Interested in</label>

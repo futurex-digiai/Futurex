@@ -39,7 +39,7 @@ $out = fopen('php://output', 'w');
 fprintf($out, "\xEF\xBB\xBF");
 
 // Header row
-fputcsv($out, ['Date', 'Name', 'Email', 'Interested In', 'Course Mode', 'Message']);
+fputcsv($out, ['Date', 'Name', 'Email', 'Phone', 'Interested In', 'Course Mode', 'Message']);
 
 // Data rows
 foreach ($leads as $lead) {
@@ -47,6 +47,7 @@ foreach ($leads as $lead) {
         $lead['created_at'],
         $lead['name'],
         $lead['email'],
+        $lead['phone'] ?? '',
         $lead['interested_in'] ?? '',
         $lead['course_mode'] ?? '',
         $lead['message'],

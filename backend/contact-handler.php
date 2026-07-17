@@ -26,6 +26,7 @@ if (trim($data['website'] ?? '') !== '') {
 
 $name          = trim($data['name'] ?? '');
 $email         = trim($data['email'] ?? '');
+$phone         = trim($data['phone'] ?? '');
 $interested_in = trim($data['interested_in'] ?? '');
 $course_mode   = trim($data['course_mode'] ?? '');
 $message       = trim($data['message'] ?? '');
@@ -38,6 +39,35 @@ if ($name === '' || $email === '' || $message === '' ||
     exit;
 }
 
+function send_lead_notification($name, $email, $phone, $interested_in, $course_mode, $message) {
+    $subject = "New website enquiry from $name";
+
+    $body  = "You have a new enquiry from the FutureX website:\n\n";
+    $body .= "Name: $name\n";
+    $body .= "Email: $email\n";
+    $body .= "Phone: $phone\n";
+    $body .= "Interested in: $interested_in\n";
+    $body .= "Course mode: $course_mode\n";
+    $body .= "Message:\n$message\n";
+
+    // Build the "From" address automatically from whatever domain this
+    // script is running on (e.g. futurex.com -> no-reply@futurex.com).
+    // No mailbox needs to exist for this -- it's just the sender label.
+    $domain    = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $domain    = preg_replace('/^www\./i', '', $domain); // strip leading www.
+    $mail_from = 'no-reply@' . $domain;
+
+    $headers   = [];
+    $headers[] = "From: " . MAIL_FROM_NAME . " <" . $mail_from . ">";
+    // Reply-To is the visitor's own email, so clicking "Reply" in the
+    // client's inbox goes straight to the person who filled the form.
+    $headers[] = "Reply-To: $email";
+    $headers[] = "MIME-Version: 1.0";
+    $headers[] = "Content-Type: text/plain; charset=UTF-8";
+
+    @mail(NOTIFY_EMAIL, $subject, $body, implode("\r\n", $headers));
+}
+
 try {
     $pdo = new PDO(
         "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
@@ -47,9 +77,14 @@ try {
     );
 
     $stmt = $pdo->prepare(
-        "INSERT INTO leads (name, email, interested_in, course_mode, message) VALUES (?, ?, ?, ?, ?)"
+        "INSERT INTO leads (name, email, phone, interested_in, course_mode, message) VALUES (?, ?, ?, ?, ?, ?)"
     );
-    $stmt->execute([$name, $email, $interested_in, $course_mode, $message]);
+    $stmt->execute([$name, $email, $phone, $interested_in, $course_mode, $message]);
+
+    // Email the client a copy of this lead. If mail() fails for any reason
+    // (e.g. mailbox not set up yet), we swallow the error -- the lead is
+    // already safely saved in the database either way.
+    send_lead_notification($name, $email, $phone, $interested_in, $course_mode, $message);
 
     echo json_encode(['success' => true, 'message' => "Thanks! We'll be in touch soon."]);
 } catch (PDOException $e) {

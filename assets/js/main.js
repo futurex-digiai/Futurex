@@ -348,6 +348,7 @@
         const payload = {
           name: form.querySelector("[name=name]").value.trim(),
           email: form.querySelector("[name=email]").value.trim(),
+          phone: form.querySelector("[name=phone]") ? form.querySelector("[name=phone]").value.trim() : "",
           interested_in: form.querySelector("[name=interest]").value.trim(),
           course_mode: form.querySelector("[name=mode]").value.trim(),
           message: form.querySelector("[name=message]").value.trim(),
